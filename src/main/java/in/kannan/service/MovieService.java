@@ -3,7 +3,7 @@ package in.kannan.service;
 import java.util.List;
 
 import in.kannan.dao.MovieDAO;
-import in.kannan.exception.DAOException;
+import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.model.Movie;
 
@@ -26,7 +26,7 @@ public class MovieService {
 		try {
 			List<Movie> list = MovieDAO.findAll();
 			return list;
-		} catch (DAOException e) {
+		} catch (DBException e) {
 
 			e.printStackTrace();
 			throw new ServiceException(e, "Unable to Display Movie");

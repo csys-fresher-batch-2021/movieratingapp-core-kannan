@@ -1,6 +1,6 @@
 package in.kannan.exception;
 
-public class ConnectionException extends Exception {
+public class ConnectionException extends RuntimeException {
 	/**
 	 * 
 	 */

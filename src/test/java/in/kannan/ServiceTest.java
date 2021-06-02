@@ -8,7 +8,10 @@ import in.kannan.service.MovieService;
 
 
 
-public class TestClass {
+public class ServiceTest {
+	public ServiceTest() {
+		super();
+	}
 	public static void displayMovieDetail(List<Movie> list) {
 		for (Movie movie : list) {
 			System.out.println(movie);

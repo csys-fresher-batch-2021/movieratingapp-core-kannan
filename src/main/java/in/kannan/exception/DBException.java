@@ -1,6 +1,6 @@
 package in.kannan.exception;
 
-public class DAOException extends Exception {
+public class DBException extends Exception {
 	/**
 	 * 
 	 */
@@ -12,7 +12,7 @@ public class DAOException extends Exception {
 	 * @param message to be thrown
 	 */
 
-	public DAOException(String message) {
+	public DBException(String message) {
 		super(message);
 	}
 
@@ -23,7 +23,7 @@ public class DAOException extends Exception {
 	 * @param message to be thrown
 	 */
 
-	public DAOException(Exception e, String message) {
+	public DBException(Exception e, String message) {
 		super(message, e);
 
 	}

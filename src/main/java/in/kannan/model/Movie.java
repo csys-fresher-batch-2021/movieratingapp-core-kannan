@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Movie {
 	private Integer id;
 	private String name;
-	private LocalDate startDate;
+	private LocalDate releaseDate;
 	private boolean status;
 	private LocalDate endDate;
 
@@ -41,14 +41,14 @@ public class Movie {
 	 * @return the startDate
 	 */
 	public LocalDate getStartDate() {
-		return startDate;
+		return releaseDate;
 	}
 
 	/**
 	 * @param startDate the startDate to set
 	 */
 	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
+		this.releaseDate = startDate;
 	}
 
 	/**
@@ -83,14 +83,14 @@ public class Movie {
 		super();
 		id = movieId;
 		this.name = name;
-		this.startDate = startDate;
+		this.releaseDate = startDate;
 		this.status = status;
 		this.endDate = endDate;
 	}
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", name=" + name + ", startDate=" + startDate + ", status=" + status + ", endDate="
+		return "Movie [id=" + id + ", name=" + name + ", startDate=" + releaseDate + ", status=" + status + ", endDate="
 				+ endDate + "]";
 	}
 

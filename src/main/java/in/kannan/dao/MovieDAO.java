@@ -33,7 +33,7 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,movie_name,release_date,status,end_date from " + "movies";
+			String sql = "select movie_id,movie_name,release_date,status,end_date from movies order by movie_id";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {

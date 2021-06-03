@@ -51,7 +51,7 @@ public class ConnectionUtil {
 	 * @param con Connection variable
 	 * @throws DBException handles SQLException and throws as DAOException
 	 */
-	public static void close(ResultSet rs, PreparedStatement ps, Connection con) throws DBException {
+	public static void close(ResultSet rs, PreparedStatement ps, Connection con) {
 		try {
 			if (rs != null) {
 				rs.close();

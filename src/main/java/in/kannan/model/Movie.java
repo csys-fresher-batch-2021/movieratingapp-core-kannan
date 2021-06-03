@@ -37,6 +37,13 @@ public class Movie {
 		this.name = name;
 	}
 
+	public Movie(Integer id, String name, LocalDate releaseDate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.releaseDate = releaseDate;
+	}
+
 	/**
 	 * @return the startDate
 	 */

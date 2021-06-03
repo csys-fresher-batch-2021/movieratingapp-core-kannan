@@ -43,10 +43,15 @@ public class MovieDAO {
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean("status");
 				Date endDate = rs.getDate("end_date");
-				LocalDate getEndDate = endDate.toLocalDate();
-				Movie mov = new Movie(id, name, getStartDate, active, getEndDate);
-				list.add(mov);
+				if (endDate != null) {
+					LocalDate getEndDate = endDate.toLocalDate();
+					Movie mov = new Movie(id, name, getStartDate, active, getEndDate);
+					list.add(mov);
 
+				} else {
+					Movie movi = new Movie(id, name, getStartDate);
+					list.add(movi);
+				}
 			}
 		} catch (SQLException e) {
 

@@ -56,9 +56,13 @@ public class ConnectionUtil {
 			if (rs != null) {
 				rs.close();
 			}
+			if (ps != null) {
 
-			ps.close();
-			con.close();
+				ps.close();
+			}
+			if (con != null) {
+				con.close();
+			}
 		} catch (SQLException e) {
 
 			e.printStackTrace();

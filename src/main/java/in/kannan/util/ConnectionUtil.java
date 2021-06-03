@@ -36,6 +36,7 @@ public class ConnectionUtil {
 			Class.forName(DRIVER_CLASS_NAME);
 			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ConnectionException(e, "Unable to Connect");
 		}
 

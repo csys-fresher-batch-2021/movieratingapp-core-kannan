@@ -24,9 +24,8 @@ public class MovieService {
 	 */
 	public static List<Movie> getMovies() throws ServiceException {
 		try {
-			List<Movie> list = MovieDAO.findAll();
-			List<Movie> movieDetail = list;
-			return movieDetail;
+			return  MovieDAO.findAll();
+			
 		} catch (DBException e) {
 
 			e.printStackTrace();

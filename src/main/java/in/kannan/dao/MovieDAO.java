@@ -49,7 +49,7 @@ public class MovieDAO {
 					list.add(mov);
 
 				} else {
-					Movie movi = new Movie(id, name, getStartDate);
+					Movie movi = new Movie(id, name, getStartDate,active);
 					list.add(movi);
 				}
 			}

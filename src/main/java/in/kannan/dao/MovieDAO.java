@@ -22,7 +22,7 @@ public class MovieDAO {
 	 * returns the movie detail
 	 * 
 	 * @return movie details as list
-	 * @throws DBException due to failure in DAO
+	 * @throws DBException 
 	 */
 
 	public static List<Movie> findAll() throws DBException {
@@ -43,15 +43,13 @@ public class MovieDAO {
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean("status");
 				Date endDate = rs.getDate("end_date");
+				LocalDate getEndDate = null;
 				if (endDate != null) {
-					LocalDate getEndDate = endDate.toLocalDate();
-					Movie mov = new Movie(id, name, getStartDate, active, getEndDate);
-					list.add(mov);
-
-				} else {
-					Movie movi = new Movie(id, name, getStartDate,active);
-					list.add(movi);
+					getEndDate = endDate.toLocalDate();
 				}
+				Movie mov = new Movie(id, name, getStartDate, active, getEndDate);
+				list.add(mov);
+
 			}
 		} catch (SQLException e) {
 

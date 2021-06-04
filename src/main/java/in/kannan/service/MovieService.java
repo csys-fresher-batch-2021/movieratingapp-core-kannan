@@ -19,16 +19,14 @@ public class MovieService {
 	 * get movie details from DAO
 	 * 
 	 * @return movie details list
-	 * @throws ServiceException DAOException is caught and thrown as
-	 *                          ServiceException
+	 * @throws
 	 */
 	public static List<Movie> getMovies() throws ServiceException {
 		try {
-			return  MovieDAO.findAll();
-			
+			return MovieDAO.findAll();
+
 		} catch (DBException e) {
 
-			e.printStackTrace();
 			throw new ServiceException(e, "Unable to Display Movie");
 		}
 	}

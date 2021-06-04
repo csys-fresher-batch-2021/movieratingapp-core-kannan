@@ -26,8 +26,7 @@ public class ConnectionUtil {
 	 * gets connection to database localhost
 	 * 
 	 * @return connection
-	 * @throws ConnectionException ClassNotFoundException and SQLException is caught
-	 *                             and thrown as ConnectionException
+	 * @throws ConnectionException
 	 */
 
 	public static Connection getConnection() throws ConnectionException {
@@ -46,10 +45,10 @@ public class ConnectionUtil {
 	/**
 	 * close connection for ResultSet ,PreparedStatement and Connection
 	 * 
-	 * @param rs  ResultSet variable
-	 * @param ps  PreparedStatement variable
-	 * @param con Connection variable
-	 * @throws DBException handles SQLException and throws as DAOException
+	 * @param rs  
+	 * @param ps  
+	 * @param con 
+	 * @throws DBException 
 	 */
 	public static void close(ResultSet rs, PreparedStatement ps, Connection con) {
 		try {

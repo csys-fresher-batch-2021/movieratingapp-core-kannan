@@ -8,11 +8,13 @@ import in.kannan.service.MovieService;
 
 
 
-public class ServiceTest {
-	public ServiceTest() {
-		super();
-	}
-	public static void displayMovieDetail(List<Movie> list) {
+public class MovieServiceTest {
+	/**
+	 * Test case : To display all movie detail.
+	 * @throws ServiceException
+	 */
+	public static void displayMovieDetail() throws ServiceException {
+		List<Movie> list = MovieService.getMovies();
 		for (Movie movie : list) {
 			System.out.println(movie);
 
@@ -20,8 +22,9 @@ public class ServiceTest {
 	}
 
 	public static void main(String[] args) throws ServiceException {
-		List<Movie> list = MovieService.getMovies();
-		displayMovieDetail(list);
+		
+		displayMovieDetail();
+		
 
 	}
 

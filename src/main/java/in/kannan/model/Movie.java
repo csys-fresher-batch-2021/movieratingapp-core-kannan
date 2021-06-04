@@ -19,8 +19,8 @@ public class Movie {
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Integer movieId) {
-		this.id = movieId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
@@ -33,15 +33,15 @@ public class Movie {
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String movieName) {
-		this.name = movieName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Movie(Integer movieId, String movieName, LocalDate movieReleaseDate) {
+	public Movie(Integer id, String name, LocalDate releaseDate) {
 		super();
-		this.id = movieId;
-		this.name = movieName;
-		this.releaseDate = movieReleaseDate;
+		this.id = id;
+		this.name = name;
+		this.releaseDate = releaseDate;
 	}
 
 	/**
@@ -54,8 +54,8 @@ public class Movie {
 	/**
 	 * @param releaseDate the releaseDate to set
 	 */
-	public void setReleaseDate(LocalDate movieReleaseDate) {
-		this.releaseDate = movieReleaseDate;
+	public void setReleaseDate(LocalDate releaseDate) {
+		this.releaseDate = releaseDate;
 	}
 
 	/**
@@ -68,8 +68,8 @@ public class Movie {
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(boolean active) {
-		this.status = active;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	/**
@@ -82,31 +82,28 @@ public class Movie {
 	/**
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(LocalDate movieEndDate) {
-		this.endDate = movieEndDate;
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
 	}
 
-	public Movie(Integer movieId, String movieName, LocalDate movieReleaseDate, boolean active, LocalDate movieEndDate) {
-		super();
-		this.id = movieId;
-		this.name = movieName;
-		this.releaseDate = movieReleaseDate;
-		this.status = active;
-		this.endDate = movieEndDate;
+	public Movie(Integer id, String name, LocalDate releaseDate, boolean status,
+			LocalDate endDate) {
+		this(id,name,releaseDate,status);	// call 4 argument constructor	
+		this.endDate = endDate;
 	}
 
-	public Movie(Integer movieId, String movieName, LocalDate movieReleaseDate, boolean active) {
+	public Movie(Integer id, String name, LocalDate releaseDate, boolean status) {
 		super();
-		this.id = movieId;
-		this.name = movieName;
-		this.releaseDate = movieReleaseDate;
-		this.status = active;
+		this.id = id;
+		this.name = name;
+		this.releaseDate = releaseDate;
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", name=" + name + ", releaseDate=" + releaseDate + ", status=" + status + ", endDate="
-				+ endDate + "]";
+		return "Movie [id=" + id + ", name=" + name + ", releaseDate=" + releaseDate + ", status=" + status
+				+ ", endDate=" + endDate + "]";
 	}
 
 }

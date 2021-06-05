@@ -14,12 +14,15 @@ import in.kannan.model.Movie;
 import in.kannan.util.ConnectionUtil;
 
 public class MovieDAO {
+	/**
+	 * private constructor to hide the existing class
+	 */
 	private MovieDAO() {
 
 	}
 
 	/**
-	 * returns the movie detail
+	 * returns the movie details as list 
 	 * 
 	 * @return movie details as list
 	 * @throws DBException 

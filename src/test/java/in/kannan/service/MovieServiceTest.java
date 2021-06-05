@@ -15,8 +15,10 @@ public class MovieServiceTest {
 	/**
 	 * displays movie details 
 	 * @param list contain movie detail
+	 * @throws ServiceException 
 	 */
-	public static void displayMovieDetail(List<Movie> list) {
+	public static void displayMovieDetail() throws ServiceException {
+		List<Movie> list = MovieService.getMovies();
 		for (Movie movie : list) {
 			System.out.println(movie);
 
@@ -29,8 +31,8 @@ public class MovieServiceTest {
 	 */
 
 	public static void main(String[] args) throws ServiceException {
-		List<Movie> list = MovieService.getMovies();
-		displayMovieDetail(list);
+		
+		displayMovieDetail();
 
 	}
 

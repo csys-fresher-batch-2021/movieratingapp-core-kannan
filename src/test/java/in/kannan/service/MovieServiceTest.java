@@ -2,13 +2,9 @@ package in.kannan.service;
 
 import java.util.List;
 
-import in.kannan.dao.AdminDAO;
-import in.kannan.exception.AdminLoginException;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.model.Movie;
-import in.kannan.model.Users;
-import in.kannan.util.Logger;
 
 public class MovieServiceTest {
 	public MovieServiceTest() {
@@ -38,10 +34,9 @@ public class MovieServiceTest {
 	 * @throws DBException
 	 */
 
-	public static void main(String[] args) throws ServiceException, DBException, AdminLoginException {
+	public static void main(String[] args) throws ServiceException, DBException {
 
-		// displayMovieDetail();
-		Logger.log(AdminService.checkAdminLogin("naraya@live.com", "jefien344@##AAS"));
+		displayMovieDetail();
 
 	}
 

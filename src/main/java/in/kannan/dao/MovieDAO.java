@@ -12,6 +12,7 @@ import java.util.List;
 import in.kannan.exception.DBException;
 import in.kannan.model.Movie;
 import in.kannan.util.ConnectionUtil;
+import in.kannan.util.Logger;
 
 public class MovieDAO {
 	/**
@@ -22,10 +23,10 @@ public class MovieDAO {
 	}
 
 	/**
-	 * returns the movie details as list 
+	 * returns the movie details as list
 	 * 
 	 * @return movie details as list
-	 * @throws DBException 
+	 * @throws DBException
 	 */
 
 	public static List<Movie> findAll() throws DBException {
@@ -56,8 +57,8 @@ public class MovieDAO {
 			}
 		} catch (SQLException e) {
 
-			e.printStackTrace();
-			throw new DBException(e, "Unable to display movies");
+			Logger.trace(e);
+			throw new DBException(e, "Unable to fetch the movie datail");
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 

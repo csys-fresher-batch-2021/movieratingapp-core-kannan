@@ -5,31 +5,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import in.kannan.exception.AdminLoginException;
 import in.kannan.exception.DBException;
-import in.kannan.model.Users;
+import in.kannan.model.User;
 import in.kannan.util.ConnectionUtil;
+import in.kannan.util.Logger;
 
-public class AdminDAO {
-	private AdminDAO() {
+public class UserDAO {
+	private UserDAO() {
 		// private constructor to hide the implicit class
 
 	}
 
 	/**
-	 * finds the correct admin to login
+	 * returns the particular row
 	 * 
-	 * @param email
-	 * @param password
+	 * @param email    input the email
+	 * @param password input the password
+	 * @return the user list
 	 * @throws DBException
-	 * @throws AdminLoginException
 	 */
-	public static Users findByGmailAndPassword(String email, String password) throws DBException, AdminLoginException {
+	public static User findByEmailAndPassword(String email, String password) throws DBException {
 
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		Users use = null;
+		User user = null;
 		connection = ConnectionUtil.getConnection();
 		try {
 			String sql = "select id,name,email,role from users where email = ? and password = ?";
@@ -38,34 +38,25 @@ public class AdminDAO {
 			pst.setString(1, email);
 			pst.setString(2, password);
 			rs = pst.executeQuery();
+
 			if (rs.next()) {
+
 				Integer id = rs.getInt("id");
 				String name = rs.getString("name");
 				String role = rs.getString("role");
 				String email1 = rs.getString("email");
-
-				if (role.equals("Admin")) {
-
-					use = new Users(id, name, email1, role);
-
-				} else {
-					throw new AdminLoginException("Only Admin could login");
-				}
-
+				user = new User(id, name, email1, role);
 			}
-			if (use == null) {
+		}
 
-				throw new AdminLoginException("Null Data");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DBException("Can't fetch the information");
+		catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(e, "Unable to fetch the details");
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
 
-		return use;
+		return user;
 
 	}
-
 }

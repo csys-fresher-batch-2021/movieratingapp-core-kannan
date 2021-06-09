@@ -9,7 +9,7 @@ public class ConnectionException extends RuntimeException {
 	/**
 	 * exception thrown during connection
 	 * 
-	 * @param message to be thrown
+	 * @param message the message to be thrown
 	 */
 
 	public ConnectionException(String message) {
@@ -19,8 +19,8 @@ public class ConnectionException extends RuntimeException {
 	/**
 	 * exception to be thrown during connection
 	 * 
-	 * @param e       type of exception cached
-	 * @param message message to be thrown
+	 * @param e       cached exception type
+	 * @param message the message to be thrown
 	 */
 
 	public ConnectionException(Exception e, String message) {

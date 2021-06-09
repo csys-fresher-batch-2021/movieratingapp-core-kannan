@@ -9,7 +9,7 @@ public class ServiceException extends Exception {
 	/**
 	 * exception to be thrown in service class
 	 * 
-	 * @param message to be thrown
+	 * @param message the message to be thrown
 	 */
 
 	public ServiceException(String message) {
@@ -17,10 +17,10 @@ public class ServiceException extends Exception {
 	}
 
 	/**
-	 * exception to be thrown in service class
+	 * exception to be thrown in service class with mentioning the type
 	 * 
-	 * @param e       cached exception
-	 * @param message to be thrown
+	 * @param e       cached exception type
+	 * @param message the message to be thrown
 	 */
 
 	public ServiceException(Exception e, String message) {

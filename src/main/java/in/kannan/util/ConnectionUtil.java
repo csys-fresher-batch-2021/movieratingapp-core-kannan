@@ -23,7 +23,7 @@ public class ConnectionUtil {
 	private static final String DB_PASSWORD = System.getenv("spring.datasource.password");
 
 	/**
-	 * gets connection to database localhost
+	 * create connection to the database
 	 * 
 	 * @return connection
 	 * @throws ConnectionException
@@ -35,7 +35,7 @@ public class ConnectionUtil {
 			Class.forName(DRIVER_CLASS_NAME);
 			connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.trace(e);
 			throw new ConnectionException(e, "Unable to Connect");
 		}
 
@@ -45,10 +45,10 @@ public class ConnectionUtil {
 	/**
 	 * close connection for ResultSet ,PreparedStatement and Connection
 	 * 
-	 * @param rs  
-	 * @param ps  
-	 * @param con 
-	 * @throws DBException 
+	 * @param rs  ResultSet variable
+	 * @param ps  PreparedStatement variable
+	 * @param con Connection variable
+	 * @throws DBException
 	 */
 	public static void close(ResultSet rs, PreparedStatement ps, Connection con) {
 		try {
@@ -64,7 +64,7 @@ public class ConnectionUtil {
 			}
 		} catch (SQLException e) {
 
-			e.printStackTrace();
+			Logger.trace(e);
 
 		}
 	}

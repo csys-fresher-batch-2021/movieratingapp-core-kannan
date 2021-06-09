@@ -6,6 +6,7 @@ import in.kannan.dao.MovieDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.model.Movie;
+import in.kannan.util.Logger;
 
 public class MovieService {
 	/**
@@ -26,8 +27,8 @@ public class MovieService {
 			return MovieDAO.findAll();
 
 		} catch (DBException e) {
-
-			throw new ServiceException(e, "Unable to Display Movie");
+			Logger.trace(e);
+			throw new ServiceException(e, "Unable to fetch the movie details");
 		}
 	}
 

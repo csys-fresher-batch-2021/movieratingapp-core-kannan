@@ -27,8 +27,8 @@ public class MovieService {
 			return MovieDAO.findAll();
 
 		} catch (DBException e) {
-            Logger.trace(e);
-			throw new ServiceException(e, "Unable to call DAO");
+			Logger.trace(e);
+			throw new ServiceException(e, "Unable to fetch the movie details");
 		}
 	}
 

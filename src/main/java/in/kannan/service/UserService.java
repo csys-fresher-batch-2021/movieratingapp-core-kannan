@@ -5,6 +5,7 @@ import in.kannan.validator.UserValidator;
 
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
+import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
 
@@ -29,15 +30,15 @@ public class UserService {
 			user = UserDAO.findByEmailAndPassword(email, password);
 
 			if (user == null) {
-				throw new ServiceException("Invalid Login Credentials");
+				throw new ServiceException("Invalid Login details");
 			} else if (!user.getRole().equals("ADMIN")) {
 				throw new ServiceException("Only ADMIN could login");
 			}
 
-		} catch (DBException e) {
+		} catch (DBException | ValidationException e) {
 			Logger.trace(e);
 
-			throw new ServiceException(e, "Unable to call the DAO");
+			throw new ServiceException(e, "Unable to fetch the user details");
 		}
 
 		return user;

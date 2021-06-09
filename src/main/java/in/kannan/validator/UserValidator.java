@@ -3,9 +3,7 @@ package in.kannan.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
-import in.kannan.util.Logger;
 
 public class UserValidator {
 	private UserValidator() {
@@ -66,19 +64,17 @@ public class UserValidator {
 	 * 
 	 * @param email    input the email
 	 * @param password input the password
-	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
 
-	public static void validate(String email, String password) throws ServiceException {
-		try {
-			if (!isValidEmail(email) || !isValidPassword(password)) {
-				throw new ValidationException("Invalid input data");
-			}
-		} catch (ValidationException e) {
-			Logger.trace(e);
-			throw new ServiceException(e, e.getMessage());
+	public static void validate(String email, String password) throws ValidationException {
+
+		if (!isValidEmail(email)) {
+			throw new ValidationException("Invalid email format ");
+		} else if (!isValidPassword(password)) {
+			throw new ValidationException("Invalid password format ");
+
 		}
 
 	}
-
 }

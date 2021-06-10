@@ -37,7 +37,7 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,movie_name,release_date,status,end_date from movies order by movie_id";
+			String sql = "select movie_id,movie_name,release_date,status from movies order by movie_id";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -46,12 +46,8 @@ public class MovieDAO {
 				Date releaseDate = rs.getDate("release_date");
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean("status");
-				Date endDate = rs.getDate("end_date");
-				LocalDate getEndDate = null;
-				if (endDate != null) {
-					getEndDate = endDate.toLocalDate();
-				}
-				Movie mov = new Movie(id, name, getStartDate, active, getEndDate);
+
+				Movie mov = new Movie(id, name, getStartDate, active);
 				list.add(mov);
 
 			}

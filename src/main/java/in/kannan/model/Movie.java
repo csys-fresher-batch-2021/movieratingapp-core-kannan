@@ -7,7 +7,6 @@ public class Movie {
 	private String name;
 	private LocalDate releaseDate;
 	private boolean status;
-	private LocalDate endDate;
 
 	/**
 	 * @return the id
@@ -37,11 +36,11 @@ public class Movie {
 		this.name = name;
 	}
 
-	public Movie(Integer id, String name, LocalDate releaseDate) {
+	public Movie(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.releaseDate = releaseDate;
+
 	}
 
 	/**
@@ -72,26 +71,6 @@ public class Movie {
 		this.status = status;
 	}
 
-	/**
-	 * @return the endDate
-	 */
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-
-	public Movie(Integer id, String name, LocalDate releaseDate, boolean status,
-			LocalDate endDate) {
-		this(id,name,releaseDate,status);	// call 4 argument constructor	
-		this.endDate = endDate;
-	}
-
 	public Movie(Integer id, String name, LocalDate releaseDate, boolean status) {
 		super();
 		this.id = id;
@@ -102,8 +81,7 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", name=" + name + ", releaseDate=" + releaseDate + ", status=" + status
-				+ ", endDate=" + endDate + "]";
+		return "Movie [id=" + id + ", name=" + name + ", releaseDate=" + releaseDate + ", status=" + status + "]";
 	}
 
 }

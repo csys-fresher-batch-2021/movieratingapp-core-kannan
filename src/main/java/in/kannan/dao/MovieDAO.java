@@ -47,8 +47,8 @@ public class MovieDAO {
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean("status");
 
-				Movie mov = new Movie(id, name, getStartDate, active);
-				list.add(mov);
+				Movie movie = new Movie(id, name, getStartDate, active);
+				list.add(movie);
 
 			}
 		} catch (SQLException e) {

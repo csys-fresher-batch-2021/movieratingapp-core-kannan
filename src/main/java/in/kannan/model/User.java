@@ -7,6 +7,11 @@ public class User {
 	private String password;
 	private String role;
 
+	public User(String role) {
+		super();
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + "]";

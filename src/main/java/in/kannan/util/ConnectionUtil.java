@@ -69,4 +69,28 @@ public class ConnectionUtil {
 		}
 	}
 
+	/**
+	 * closes both PreparedStatement and connection
+	 * 
+	 * @param ps  PreparedStatement
+	 * @param con Connection
+	 */
+
+	public static void close(PreparedStatement ps, Connection con) {
+		try {
+
+			if (ps != null) {
+
+				ps.close();
+			}
+			if (con != null) {
+				con.close();
+			}
+		} catch (SQLException e) {
+
+			Logger.trace(e);
+
+		}
+	}
+
 }

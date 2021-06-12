@@ -1,0 +1,1 @@
+create table movie_rating(movie_id int references movies(movie_id),rating numeric(3,2) );

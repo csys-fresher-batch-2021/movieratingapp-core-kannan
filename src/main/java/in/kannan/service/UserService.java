@@ -25,7 +25,7 @@ public class UserService {
 		User user = null;
 		try {
 
-			UserValidator.validate(email, password);
+			UserValidator.validateLoginCredentials(email, password);
 
 			user = UserDAO.findByEmailAndPassword(email, password);
 

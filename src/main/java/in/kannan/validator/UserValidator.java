@@ -67,7 +67,7 @@ public class UserValidator {
 	 * @throws ValidationException
 	 */
 
-	public static void validate(String email, String password) throws ValidationException {
+	public static void validateLoginCredentials(String email, String password) throws ValidationException {
 
 		if (!isValidEmail(email)) {
 			throw new ValidationException("Invalid email format ");

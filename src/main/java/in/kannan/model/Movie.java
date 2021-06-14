@@ -8,6 +8,11 @@ public class Movie {
 	private LocalDate releaseDate;
 	private boolean status;
 
+	public Movie(String name) {
+		super();
+		this.name = name;
+	}
+
 	/**
 	 * @return the id
 	 */

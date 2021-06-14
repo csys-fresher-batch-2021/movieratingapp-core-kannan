@@ -9,7 +9,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
+import in.kannan.exception.ValidationException;
 import in.kannan.model.Movie;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
@@ -54,12 +56,139 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch the movie datail");
+			throw new DBException(e, "Unable to fetch the movie detail");
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
 		}
 		return list;
+
+	}
+
+	/**
+	 * This method checks the presence of movie in the database
+	 * 
+	 * @param movieName
+	 * @return
+	 * @throws ValidationException
+	 */
+
+	public static Movie exist(String movieName) throws ValidationException {
+		Movie movie = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select movie_name from movies where lower(movie_name) = lower(?)";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, movieName);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				String name = rs.getString("movie_name");
+				movie = new Movie(name);
+
+			}
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new ValidationException("Failed to fetch movie name from movies table");
+		} finally {
+			ConnectionUtil.close(rs, pst, null);
+		}
+		return movie;
+	}
+
+	/**
+	 * This method inserts the movie detail into the database
+	 * 
+	 * @param movieName
+	 * @param releaseDate
+	 * @param status
+	 * @param id
+	 * @throws DBException
+	 */
+
+	public static void save(String movieName, LocalDate releaseDate, boolean status) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "insert into movies (movie_name,release_date,status) values (?,?,?)";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, movieName);
+			Date date = Date.valueOf(releaseDate);
+			pst.setDate(2, date);
+			pst.setBoolean(3, status);
+			pst.executeUpdate();
+
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Failed to insert the movie detail  ");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+	}
+
+	/**
+	 * This method returns the movie id for the particular movie name
+	 * 
+	 * @param movieName
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static Integer findByMovieId(String movieName) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Integer movieId = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select movie_id from movies where lower(movie_name) = lower(?)";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, movieName);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				movieId = rs.getInt("movie_id");
+
+			}
+
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Failed to fetch movie id for the given movie  ");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+
+		}
+		return movieId;
+
+	}
+
+	/**
+	 * This method removes particular movie in movies table
+	 * 
+	 * @param movieName
+	 * @throws DBException
+	 */
+
+	public static void remove(String movieName) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "delete from movies where lower(movie_name) =lower(?)";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, movieName);
+			pst.executeUpdate();
+
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Failed to delete the movie ");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+
+		}
 
 	}
 

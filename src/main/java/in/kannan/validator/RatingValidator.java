@@ -10,13 +10,13 @@ public class RatingValidator {
 	/**
 	 * validates the user Id
 	 * 
-	 * @param userId
+	 * @param id
 	 * @return boolean data
 	 */
 
-	public static boolean isValidId(Integer userId) {
+	public static boolean isValidId(Integer id) {
 		boolean isValid = false;
-		if (userId > 0) {
+		if (id > 0) {
 			isValid = true;
 		}
 		return isValid;

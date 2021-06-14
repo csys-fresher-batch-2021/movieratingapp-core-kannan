@@ -1,7 +1,9 @@
 package in.kannan.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import in.kannan.dao.MovieDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.model.Movie;
@@ -36,7 +38,11 @@ public class MovieServiceTest {
 
 	public static void main(String[] args) throws ServiceException, DBException {
 
-		displayMovieDetail();
+	//	displayMovieDetail();
+		String date = "2021-03-19";
+		LocalDate raleaseDate = LocalDate .parse(date);
+	//	MovieService.addMovie("Thaen", raleaseDate, true);
+		MovieService.removeMovie("maaRa");
 
 	}
 

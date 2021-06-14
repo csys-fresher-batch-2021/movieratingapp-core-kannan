@@ -7,7 +7,7 @@ import in.kannan.exception.ServiceException;
 
 public class RatingServiceTest {
 	public static void main(String[] args) throws SQLException, ServiceException, DBException {
-		RatingService.addUsersRating(5,4,6);
+		RatingService.addUsersRating(1,9,6);
 		
 	}
 

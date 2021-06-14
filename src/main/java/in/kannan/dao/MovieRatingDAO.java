@@ -2,17 +2,10 @@ package in.kannan.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
-import in.kannan.exception.ServiceException;
-import in.kannan.model.MovieRating;
-import in.kannan.model.UserRating;
-import in.kannan.service.RatingService;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
 
@@ -21,80 +14,22 @@ public class MovieRatingDAO {
 		// private constructor to hide implicit class
 	}
 
-	/**
-	 * returns the object with data if rated else null
-	 * 
-	 * @param userId
-	 * @param movieId
-	 * @return UserRating object as userRating
-	 * @throws DBException
-	 */
-
-	public static UserRating exist(Integer userId, Integer movieId) throws DBException {
-		UserRating userRating = null;
+	public static void save(Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
-		ResultSet rs = null;
-
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select user_id from rating_by_user where user_id = ? and movie_id =?";
+			String sql = "insert into movie_rating (movie_id) values (?)";
 			pst = connection.prepareStatement(sql);
-			pst.setInt(1, userId);
-			pst.setInt(2, movieId);
-
-			rs = pst.executeQuery();
-			if (rs.next()) {
-				Integer id = rs.getInt("user_Id");
-				userRating = new UserRating(id);
-			}
+			pst.setInt(1, movieId);
+			pst.executeUpdate();
 
 		} catch (ConnectionException | SQLException e) {
-
 			Logger.trace(e);
-			throw new DBException("Unable to fetch the details");
+			throw new DBException("Failed to insert into the table ");
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
-		}
-		return userRating;
-
-	}
-
-	/**
-	 * inserts the details into rating_by_user table
-	 * 
-	 * @param userId
-	 * @param movieId
-	 * @param rating
-	 * @throws DBException
-	 */
-
-	public static void save(Integer userId, Integer movieId, Integer rating) throws DBException {
-
-		Connection connection = null;
-		PreparedStatement pst = null;
-		try {
-			connection = ConnectionUtil.getConnection();
-			String sql = "insert into rating_by_user values (?,?,?)";
-			pst = connection.prepareStatement(sql);
-			pst.setInt(1, userId);
-			pst.setInt(2, movieId);
-
-			pst.setInt(3, rating);
-
-			int r = exist(pst);
-
-			if (r == 1) {
-				RatingService.updateRating(movieId);
-			}
-
-		} catch (SQLException | ServiceException e) {
-
-			Logger.trace(e);
-			throw new DBException("Failed to insert in table");
-		} finally {
-			ConnectionUtil.close(pst, connection);
 		}
 
 	}
@@ -129,61 +64,29 @@ public class MovieRatingDAO {
 	}
 
 	/**
-	 * check the proper insertion into table else throws exception
+	 * This table removes the particular movie in movie_rating table in database
 	 * 
-	 * @param ps
-	 * @return
+	 * @param movieId this id gets removed
 	 * @throws DBException
 	 */
 
-	public static int exist(PreparedStatement ps) throws DBException {
-		int r = 0;
-
-		try {
-			r = ps.executeUpdate();
-		} catch (SQLException e) {
-			Logger.trace(e);
-			throw new DBException("Data's not found");
-		}
-		return r;
-
-	}
-
-	/**
-	 * returns the average rating along with movie id
-	 * 
-	 * @return rating list
-	 * @throws DBException
-	 */
-
-	public static List<MovieRating> findAverageRating() throws DBException {
-		List<MovieRating> ratingList = new ArrayList<>();
+	public static void remove(Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
-		ResultSet rs = null;
-
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,avg(rating) as average_rating from rating_by_user group by movie_id";
+			String sql = "delete from movie_rating where movie_id =?";
 			pst = connection.prepareStatement(sql);
-			rs = pst.executeQuery();
-			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				double rating = rs.getDouble("average_rating");
+			pst.setInt(1, movieId);
+			pst.executeUpdate();
 
-				MovieRating movieRating = new MovieRating(id, rating);
-				ratingList.add(movieRating);
-
-			}
-		} catch (SQLException e) {
-
+		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException(e, "Failed to select the details");
+			throw new DBException("Failed to delete the movie in movie_rating table ");
 		} finally {
-			ConnectionUtil.close(rs, pst, connection);
+			ConnectionUtil.close(pst, connection);
 
 		}
-		return ratingList;
 
 	}
 

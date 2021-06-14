@@ -4,6 +4,7 @@ import java.util.List;
 
 import in.kannan.dao.MovieRatingDAO;
 import in.kannan.dao.UserDAO;
+import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
@@ -31,7 +32,7 @@ public class RatingService {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
 
-			UserRating userRating = MovieRatingDAO.exist(userId, movieId);
+			UserRating userRating = UserRatingDAO.exist(userId, movieId);
 			if (userRating != null) {
 				throw new ServiceException("You already Rated");
 			}
@@ -40,7 +41,9 @@ public class RatingService {
 				throw new ServiceException("Only users could rate the app");
 			}
 
-			MovieRatingDAO.save(userId, movieId, rating);
+			UserRatingDAO.save(userId, movieId, rating);
+			updateRating(movieId);
+
 		} catch (ValidationException | DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Failed to add your rating");
@@ -58,7 +61,7 @@ public class RatingService {
 
 	public static void updateRating(Integer id) throws ServiceException {
 		try {
-			List<MovieRating> averageRatingList = MovieRatingDAO.findAverageRating();
+			List<MovieRating> averageRatingList = UserRatingDAO.findAverageRating();
 			for (MovieRating movieRating : averageRatingList) {
 				if (movieRating.getMovieId().equals(id)) {
 					Double rating = movieRating.getRating();

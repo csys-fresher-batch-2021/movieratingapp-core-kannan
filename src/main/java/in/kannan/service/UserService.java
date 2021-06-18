@@ -22,8 +22,9 @@ public class UserService {
 	 * @param email
 	 * @param password
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
-	public static User adminLogin(String email, String password) throws ServiceException {
+	public static User adminLogin(String email, String password) throws ServiceException, ValidationException {
 		User user = null;
 		try {
 
@@ -37,7 +38,7 @@ public class UserService {
 				throw new ServiceException("Only ADMIN could login");
 			}
 
-		} catch (DBException | ValidationException e) {
+		} catch (DBException e) {
 			Logger.trace(e);
 
 			throw new ServiceException(e, "Unable to fetch the user details");

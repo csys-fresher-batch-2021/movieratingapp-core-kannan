@@ -56,16 +56,14 @@ public class MovieServiceTest {
 
 	//	displayMovieDetail();
 		String date = null;
-		MovieService.addMovie("Keelakadu", date, true);
-	//	MovieService.addMovie("Kutty Story", raleaseDate, true);
+	//	MovieService.addMovie("Keelakadu", date, true);
+	//	MovieService.removeMovie("Sencholai");
 
 	//	MovieService.removeMovie("Master");
 	//	displayMovieWithRating();
-	//	System.out.println(MovieService.getMovieDetail("michaelpatty raja"));
+	//	System.out.println(MovieService.getMovieDetail("Sencholai"));
+		System.out.println(MovieService.getMoviesWithRating());
 		
-		
-		
-
 	}
 
 }

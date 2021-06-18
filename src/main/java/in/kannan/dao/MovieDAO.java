@@ -213,8 +213,10 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status,r.rating from movies m "
-					+ "inner join movie_rating r on r.movie_id=m.movie_id";
+			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status ,a.average_rating from movies m \r\n"
+					+ "inner join (select movie_id ,avg(rating) as average_rating from rating_by_user group by movie_id ) \r\n"
+					+ "as a on m.movie_id = a.movie_id order by a.average_rating desc;\r\n";
+
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -223,7 +225,7 @@ public class MovieDAO {
 				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean(STATUS);
-				double rate = rs.getDouble("rating");
+				double rate = rs.getDouble("average_rating");
 				Movie movie = new Movie(id, name, getStartDate, active);
 
 				MovieRating rating = new MovieRating(movie, rate);
@@ -258,8 +260,9 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status,r.rating from movies m "
-					+ "inner join movie_rating r on r.movie_id= ? and m.movie_id = ?";
+			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status ,a.average_rating from movies m \r\n"
+					+ "inner join (select movie_id ,avg(rating) as average_rating from rating_by_user where \r\n"
+					+ "movie_id =? group by movie_id ) as a on m.movie_id = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			pst.setInt(2, movieId);
@@ -270,13 +273,13 @@ public class MovieDAO {
 				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean(STATUS);
-				double rate = rs.getDouble("rating");
+				double rate = rs.getDouble("average_rating");
 				Movie movie = new Movie(id, name, getStartDate, active);
 
 				rating = new MovieRating(movie, rate);
 
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | NullPointerException e) {
 
 			Logger.trace(e);
 			throw new DBException(e, "Unable to fetch movie details ");

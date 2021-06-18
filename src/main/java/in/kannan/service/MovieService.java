@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import in.kannan.dao.MovieDAO;
-import in.kannan.dao.MovieRatingDAO;
 import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
@@ -62,8 +61,6 @@ public class MovieService {
 			}
 
 			MovieDAO.save(movieName, date, status);
-			Integer movieId = MovieDAO.findByMovieId(movieName);
-			MovieRatingDAO.save(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -86,7 +83,6 @@ public class MovieService {
 				throw new ServiceException("This movie is not registered");
 			}
 			Integer movieId = MovieDAO.findByMovieId(movieName);
-			MovieRatingDAO.remove(movieId);
 			UserRatingDAO.remove(movieId);
 			MovieDAO.remove(movieName);
 
@@ -120,11 +116,13 @@ public class MovieService {
 	 * @param movieName
 	 * @return
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
 
-	public static MovieRating getMovieDetail(String movieName) throws ServiceException {
+	public static MovieRating getMovieDetail(String movieName) throws ServiceException, ValidationException {
 
 		try {
+			MovieValidator.validateMovieName(movieName);
 			Integer movieId = MovieDAO.findByMovieId(movieName);
 
 			return MovieDAO.findAllWithRatingByMovieId(movieId);

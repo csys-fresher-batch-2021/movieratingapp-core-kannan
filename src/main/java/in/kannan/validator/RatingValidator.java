@@ -8,7 +8,7 @@ public class RatingValidator {
 	}
 
 	/**
-	 * validates the user Id
+	 * Validates the user Id,it should be greater than 0.
 	 * 
 	 * @param id
 	 * @return boolean data
@@ -23,7 +23,8 @@ public class RatingValidator {
 	}
 
 	/**
-	 * validates the user rating
+	 * This method validates the user ratings, validates whether rating is in above
+	 * 0 and below or equal to 10.
 	 * 
 	 * @param rating
 	 * @return boolean data
@@ -31,14 +32,14 @@ public class RatingValidator {
 
 	public static boolean isValidRating(Integer rating) {
 		boolean isValid = false;
-		if (rating > 0 && rating < 11) {
+		if (rating > 0 && rating <= 10) {
 			isValid = true;
 		}
 		return isValid;
 	}
 
 	/**
-	 * validates user input and throws exception
+	 * Validates user input.If invalid throws exception
 	 * 
 	 * @param userId
 	 * @param movieId

@@ -17,7 +17,7 @@ public class UserDAO {
 	}
 
 	/**
-	 * returns the selected row to email and password
+	 * This method returns the detail for the given email and password.
 	 * 
 	 * @param email    input the email
 	 * @param password input the password
@@ -61,7 +61,7 @@ public class UserDAO {
 	}
 
 	/**
-	 * returns the object which holds the role type
+	 * This method returns the object which holds the role of the users.
 	 * 
 	 * @param userId
 	 * @return

@@ -11,9 +11,9 @@ public class UserValidator {
 	}
 
 	/**
-	 * validates the email
+	 * Validates the email using regular expression pattern.
 	 * 
-	 * @param mail input the email
+	 * @param mail
 	 * @return boolean value
 	 */
 
@@ -32,18 +32,18 @@ public class UserValidator {
 	}
 
 	/**
-	 * validates the password
+	 * validates the password using regular expression pattern.
 	 * 
-	 * @param password input the password
+	 * @param password
 	 * @return boolean value
 	 */
 
 	public static boolean isValidPassword(String password) {
 		boolean isValid = false;
 		/**
-		 * it must contain atleast one of the followings are number,lowercase
-		 * variabe,uppercase variable,specialcharacters and length shoul be greater than
-		 * 8 and less than 20
+		 * it must contain at least one of the followings are number,lower case
+		 * Variable,upper case variable,special characters and length should be greater
+		 * than 8 and less than 20.
 		 */
 		String pattern = "^(?=.*[0-9])" + "(?=.*[a-z])(?=.*[A-Z])" + "(?=.*[@#$%^&+=])" + "(?=\\S+$).{8,20}$";
 
@@ -60,10 +60,10 @@ public class UserValidator {
 	}
 
 	/**
-	 * validates the user details
+	 * Validates the user details if incorrect it throws the exception.
 	 * 
-	 * @param email    input the email
-	 * @param password input the password
+	 * @param email
+	 * @param password
 	 * @throws ValidationException
 	 */
 

@@ -1,1 +1,0 @@
-insert into movie_rating (movie_id) values (1),(2),(4);

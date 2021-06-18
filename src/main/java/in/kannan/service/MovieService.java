@@ -5,10 +5,12 @@ import java.util.List;
 
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.MovieRatingDAO;
+import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.Movie;
+import in.kannan.model.MovieRating;
 import in.kannan.util.Logger;
 import in.kannan.validator.MovieValidator;
 
@@ -21,7 +23,7 @@ public class MovieService {
 	}
 
 	/**
-	 * get movie details from DAO
+	 * This method fetches all the details of the movie.
 	 * 
 	 * @return movie details list
 	 * @throws
@@ -32,22 +34,28 @@ public class MovieService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e, "Unable to fetch the movie details");
+			throw new ServiceException(e, "Sorry unable to fetch the movie details");
 		}
 	}
 
 	/**
-	 * This method is used to add the new movie into the database
+	 * This method is used to add the new movie.It validates the data then add it
+	 * and it also add the data in another field.
 	 * 
 	 * @param movieName
-	 * @param date
+	 * @param releaseDate
 	 * @param status
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
 
-	public static void addMovie(String movieName, LocalDate date, boolean status) throws ServiceException {
+	public static void addMovie(String movieName, String releaseDate, boolean status)
+			throws ServiceException, ValidationException {
+
 		try {
-			MovieValidator.validateMovieName(movieName);
+
+			MovieValidator.validateMovie(movieName, releaseDate);
+			LocalDate date = LocalDate.parse(releaseDate);
 			Movie movie = MovieDAO.exist(movieName);
 			if (movie != null) {
 				throw new ServiceException("Movie Already Registered");
@@ -57,15 +65,15 @@ public class MovieService {
 			Integer movieId = MovieDAO.findByMovieId(movieName);
 			MovieRatingDAO.save(movieId);
 
-		} catch (ValidationException | DBException e) {
+		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Failed to insert ");
+			throw new ServiceException("Sorry unable to add movie ");
 		}
+
 	}
 
 	/**
-	 * This method checks the presence of movie and deletes the given movie in
-	 * database
+	 * This method checks the presence of movie and deletes the given movie
 	 * 
 	 * @param movieName
 	 * @throws ServiceException
@@ -79,12 +87,53 @@ public class MovieService {
 			}
 			Integer movieId = MovieDAO.findByMovieId(movieName);
 			MovieRatingDAO.remove(movieId);
+			UserRatingDAO.remove(movieId);
 			MovieDAO.remove(movieName);
 
 		} catch (ValidationException | DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Unable to delete the movie");
+			throw new ServiceException("Sorry unable to delete the movie");
 		}
+	}
+
+	/**
+	 * This method returns the movie detail with rating
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+
+	public static List<MovieRating> getMoviesWithRating() throws ServiceException {
+
+		try {
+			return MovieDAO.findAllWithRating();
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException("Sorry unable to fetch the detail");
+		}
+
+	}
+
+	/**
+	 * This method returns the movie Details for the particular movie
+	 * 
+	 * @param movieName
+	 * @return
+	 * @throws ServiceException
+	 */
+
+	public static MovieRating getMovieDetail(String movieName) throws ServiceException {
+
+		try {
+			Integer movieId = MovieDAO.findByMovieId(movieName);
+
+			return MovieDAO.findAllWithRatingByMovieId(movieId);
+
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException("Sorry unable to find Movie Details");
+		}
+
 	}
 
 }

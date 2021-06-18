@@ -15,10 +15,12 @@ public class UserService {
 	}
 
 	/**
-	 * calls the DAO class and use the DAO output here
+	 * This method is used for log in by the user .It checks the validity of email
+	 * and password, checks for correct email and password and also checks the user
+	 * role as only user could login.
 	 * 
-	 * @param email    input the email
-	 * @param password input the password
+	 * @param email
+	 * @param password
 	 * @throws ServiceException
 	 */
 	public static User adminLogin(String email, String password) throws ServiceException {

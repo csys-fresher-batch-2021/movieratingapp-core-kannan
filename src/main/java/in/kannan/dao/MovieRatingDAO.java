@@ -14,6 +14,13 @@ public class MovieRatingDAO {
 		// private constructor to hide implicit class
 	}
 
+	/**
+	 * This method saves the data into the database
+	 * 
+	 * @param movieId
+	 * @throws DBException
+	 */
+
 	public static void save(Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -26,7 +33,7 @@ public class MovieRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to insert into the table ");
+			throw new DBException("Failed to save the data ");
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -35,7 +42,7 @@ public class MovieRatingDAO {
 	}
 
 	/**
-	 * updates the movie_rating table
+	 * This method updates the data into the database for the given id.
 	 * 
 	 * @param rating
 	 * @param movieId
@@ -64,7 +71,7 @@ public class MovieRatingDAO {
 	}
 
 	/**
-	 * This table removes the particular movie in movie_rating table in database
+	 * This table removes the particular movie in the database for the given id.
 	 * 
 	 * @param movieId this id gets removed
 	 * @throws DBException
@@ -82,7 +89,7 @@ public class MovieRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to delete the movie in movie_rating table ");
+			throw new DBException("Failed to delete the movie  ");
 		} finally {
 			ConnectionUtil.close(pst, connection);
 

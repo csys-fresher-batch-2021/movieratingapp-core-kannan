@@ -2,8 +2,37 @@ package in.kannan.model;
 
 public class MovieRating {
 	private Integer movieId;
+	private Movie movie;
+
+	@Override
+	public String toString() {
+		return "MovieRating [movie=" + movie + ", rating=" + rating + "]";
+	}
 
 	private Double rating;
+
+
+	
+
+	public MovieRating(Movie movie,Double rating) {
+		super();
+		this.rating = rating;
+		this.movie = movie;
+	}
+
+	/**
+	 * @return the movie
+	 */
+	public Movie getMovie() {
+		return movie;
+	}
+
+	/**
+	 * @param movie the movie to set
+	 */
+	public void setMovie(Movie movie) {
+		this.movie = movie;
+	}
 
 	/**
 	 * @return the movieId

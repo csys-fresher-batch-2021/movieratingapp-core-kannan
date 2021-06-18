@@ -13,6 +13,7 @@ import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.Movie;
+import in.kannan.model.MovieRating;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
 
@@ -20,12 +21,17 @@ public class MovieDAO {
 	/**
 	 * private constructor to hide the existing class
 	 */
+	private static final String MOVIE_ID = "movie_id";
+	private static final String MOVIE_NAME = "movie_name";
+	private static final String RELEASE_DATE = "release_date";
+	private static final String STATUS = "status";
+
 	private MovieDAO() {
 
 	}
 
 	/**
-	 * returns the movie details as list
+	 * This method returns the movie details as list order by their Id.
 	 * 
 	 * @return movie details as list
 	 * @throws DBException
@@ -43,11 +49,11 @@ public class MovieDAO {
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				String name = rs.getString("movie_name");
-				Date releaseDate = rs.getDate("release_date");
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
-				boolean active = rs.getBoolean("status");
+				boolean active = rs.getBoolean(STATUS);
 
 				Movie movie = new Movie(id, name, getStartDate, active);
 				list.add(movie);
@@ -66,7 +72,7 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method checks the presence of movie in the database
+	 * This method checks the presence of movie in the database.
 	 * 
 	 * @param movieName
 	 * @return
@@ -85,13 +91,13 @@ public class MovieDAO {
 			pst.setString(1, movieName);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				String name = rs.getString("movie_name");
+				String name = rs.getString(MOVIE_NAME);
 				movie = new Movie(name);
 
 			}
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new ValidationException("Failed to fetch movie name from movies table");
+			throw new ValidationException("Unable to fetch the data");
 		} finally {
 			ConnectionUtil.close(rs, pst, null);
 		}
@@ -99,7 +105,7 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method inserts the movie detail into the database
+	 * This method inserts the movie detail into the database.
 	 * 
 	 * @param movieName
 	 * @param releaseDate
@@ -124,14 +130,14 @@ public class MovieDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to insert the movie detail  ");
+			throw new DBException("Failed to save the data  ");
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
 	}
 
 	/**
-	 * This method returns the movie id for the particular movie name
+	 * This method returns the movie id for the particular movie name.
 	 * 
 	 * @param movieName
 	 * @return
@@ -150,7 +156,7 @@ public class MovieDAO {
 			pst.setString(1, movieName);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				movieId = rs.getInt("movie_id");
+				movieId = rs.getInt(MOVIE_ID);
 
 			}
 
@@ -166,7 +172,7 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method removes particular movie in movies table
+	 * This method removes particular movie details from database.
 	 * 
 	 * @param movieName
 	 * @throws DBException
@@ -189,6 +195,96 @@ public class MovieDAO {
 			ConnectionUtil.close(pst, connection);
 
 		}
+
+	}
+
+	/**
+	 * This method displays the entire details of the movie along with ratings
+	 * 
+	 * @return list which holds all the details
+	 * @throws DBException
+	 */
+
+	public static List<MovieRating> findAllWithRating() throws DBException {
+		List<MovieRating> movieRating = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status,r.rating from movies m "
+					+ "inner join movie_rating r on r.movie_id=m.movie_id";
+			pst = connection.prepareStatement(sql);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
+				LocalDate getStartDate = releaseDate.toLocalDate();
+				boolean active = rs.getBoolean(STATUS);
+				double rate = rs.getDouble("rating");
+				Movie movie = new Movie(id, name, getStartDate, active);
+
+				MovieRating rating = new MovieRating(movie, rate);
+				movieRating.add(rating);
+
+			}
+		} catch (SQLException e) {
+
+			Logger.trace(e);
+			throw new DBException(e, "Unable to fetch movie details ");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+
+		}
+		return movieRating;
+
+	}
+
+	/**
+	 * This method returns the movie detail along rating for the input of movie Id
+	 * 
+	 * @param movieId
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static MovieRating findAllWithRatingByMovieId(Integer movieId) throws DBException {
+		MovieRating rating = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status,r.rating from movies m "
+					+ "inner join movie_rating r on r.movie_id= ? and m.movie_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, movieId);
+			pst.setInt(2, movieId);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
+				LocalDate getStartDate = releaseDate.toLocalDate();
+				boolean active = rs.getBoolean(STATUS);
+				double rate = rs.getDouble("rating");
+				Movie movie = new Movie(id, name, getStartDate, active);
+
+				rating = new MovieRating(movie, rate);
+
+			}
+		} catch (SQLException e) {
+
+			Logger.trace(e);
+			throw new DBException(e, "Unable to fetch movie details ");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+
+		}
+		return rating;
 
 	}
 

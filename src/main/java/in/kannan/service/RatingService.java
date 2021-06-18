@@ -20,7 +20,10 @@ public class RatingService {
 	}
 
 	/**
-	 * This method used to insert into table perfectly
+	 * This method is used to add the users rating.It validates the input details,
+	 * check whether the user the rated for the particular movie before ,finds the
+	 * role of the user then add their rating and also update the rating in another
+	 * field.
 	 * 
 	 * @param userId
 	 * @param movieId
@@ -53,7 +56,8 @@ public class RatingService {
 	}
 
 	/**
-	 * Used to update table correctly to the inserted movie id
+	 * This method fetch the average rating in one field and update them in another
+	 * field.
 	 * 
 	 * @param id
 	 * @throws ServiceException

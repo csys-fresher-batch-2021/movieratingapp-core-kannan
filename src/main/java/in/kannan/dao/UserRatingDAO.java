@@ -20,7 +20,7 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * inserts the details into rating_by_user table
+	 * This method saves the data into the database.
 	 * 
 	 * @param userId
 	 * @param movieId
@@ -34,7 +34,7 @@ public class UserRatingDAO {
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "insert into rating_by_user values (?,?,?)";
+			String sql = "insert into rating_by_user(user_id,movie_id,rating) values (?,?,?)";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
 			pst.setInt(2, movieId);
@@ -46,7 +46,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException("Failed to insert in table");
+			throw new DBException("Failed to save the data");
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -54,7 +54,7 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * check the proper insertion into table else throws exception
+	 * check the proper insertion into table.
 	 * 
 	 * @param ps
 	 * @return
@@ -73,7 +73,8 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * returns the average rating along with movie id
+	 * This method returns the average rating for the particular movie id from
+	 * database.
 	 * 
 	 * @return rating list
 	 * @throws DBException
@@ -101,7 +102,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Failed to select the details");
+			throw new DBException(e, "Failed to fetch the data");
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -111,7 +112,8 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * returns the object with data if rated else null
+	 * This method finds the data for the particular user id and movie id from
+	 * database.
 	 * 
 	 * @param userId
 	 * @param movieId
@@ -147,6 +149,33 @@ public class UserRatingDAO {
 
 		}
 		return userRating;
+
+	}
+
+	/**
+	 * This method removes particular data for particular id from database.
+	 * 
+	 * @param movieId
+	 * @throws DBException
+	 */
+
+	public static void remove(Integer movieId) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "delete from rating_by_user where movie_id =?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, movieId);
+			pst.executeUpdate();
+
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Failed to delete the movie ");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+
+		}
 
 	}
 

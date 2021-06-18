@@ -1,7 +1,5 @@
 package in.kannan.validator;
 
-import java.time.LocalDate;
-
 import in.kannan.exception.ValidationException;
 
 public class MovieValidator {

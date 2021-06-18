@@ -21,6 +21,11 @@ public class MovieDAO {
 	/**
 	 * private constructor to hide the existing class
 	 */
+	private static final String MOVIE_ID = "movie_id";
+	private static final String MOVIE_NAME = "movie_name";
+	private static final String RELEASE_DATE = "release_date";
+	private static final String STATUS = "status";
+
 	private MovieDAO() {
 
 	}
@@ -44,11 +49,11 @@ public class MovieDAO {
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				String name = rs.getString("movie_name");
-				Date releaseDate = rs.getDate("release_date");
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
-				boolean active = rs.getBoolean("status");
+				boolean active = rs.getBoolean(STATUS);
 
 				Movie movie = new Movie(id, name, getStartDate, active);
 				list.add(movie);
@@ -86,7 +91,7 @@ public class MovieDAO {
 			pst.setString(1, movieName);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				String name = rs.getString("movie_name");
+				String name = rs.getString(MOVIE_NAME);
 				movie = new Movie(name);
 
 			}
@@ -151,7 +156,7 @@ public class MovieDAO {
 			pst.setString(1, movieName);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				movieId = rs.getInt("movie_id");
+				movieId = rs.getInt(MOVIE_ID);
 
 			}
 
@@ -213,11 +218,11 @@ public class MovieDAO {
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				String name = rs.getString("movie_name");
-				Date releaseDate = rs.getDate("release_date");
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
-				boolean active = rs.getBoolean("status");
+				boolean active = rs.getBoolean(STATUS);
 				double rate = rs.getDouble("rating");
 				Movie movie = new Movie(id, name, getStartDate, active);
 
@@ -260,11 +265,11 @@ public class MovieDAO {
 			pst.setInt(2, movieId);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				String name = rs.getString("movie_name");
-				Date releaseDate = rs.getDate("release_date");
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
-				boolean active = rs.getBoolean("status");
+				boolean active = rs.getBoolean(STATUS);
 				double rate = rs.getDouble("rating");
 				Movie movie = new Movie(id, name, getStartDate, active);
 

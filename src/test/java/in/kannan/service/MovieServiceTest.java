@@ -20,7 +20,7 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 */
 	public static void displayMovieDetail() throws ServiceException {
-		List<Movie> list = MovieService.getMovies();
+		List<Movie> list = MovieService.getAllExceptRatings();
 		for (Movie movie : list) {
 			System.out.println(movie);
 
@@ -55,14 +55,15 @@ public class MovieServiceTest {
 		
 
 	//	displayMovieDetail();
-		String date = null;
-	//	MovieService.addMovie("Keelakadu", date, true);
+	//	String date = "2021-05-03";
+	//	MovieService.save("Dola", date, true);
 	//	MovieService.removeMovie("Sencholai");
-
-	//	MovieService.removeMovie("Master");
+    //    System.out.println(MovieService.getAll());
+		MovieService.removeMovie("Kathi");
 	//	displayMovieWithRating();
-	//	System.out.println(MovieService.getMovieDetail("Sencholai"));
-		System.out.println(MovieService.getMoviesWithRating());
+	//	System.out.println(MovieService.findByMovieName("Sangathalaivan"));
+	//	System.out.println(MovieService.getMoviesWithRating());
+	//	System.out.println(MovieService.getMoviesWithRating());
 		
 	}
 

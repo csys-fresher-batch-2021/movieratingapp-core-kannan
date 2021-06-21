@@ -73,8 +73,9 @@ public class UserDAO {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		User user = null;
-		connection = ConnectionUtil.getConnection();
+
 		try {
+			connection = ConnectionUtil.getConnection();
 			String sql = "select role from users where id = ?";
 
 			pst = connection.prepareStatement(sql);
@@ -98,6 +99,37 @@ public class UserDAO {
 		}
 
 		return user;
+
+	}
+
+	/**
+	 * This method saves the data into the database.
+	 * 
+	 * @param userName
+	 * @param email
+	 * @param password
+	 * @param role
+	 * @throws DBException
+	 */
+
+	public static void save(String userName, String email, String password, String role) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "insert into users (name,email,password,role) values (?,?,?,?)";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, userName);
+			pst.setString(2, email);
+			pst.setString(3, password);
+			pst.setString(4, role);
+			pst.execute();
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to save the data");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+		}
 
 	}
 }

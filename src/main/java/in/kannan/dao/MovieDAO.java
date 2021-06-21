@@ -25,6 +25,10 @@ public class MovieDAO {
 	private static final String MOVIE_NAME = "movie_name";
 	private static final String RELEASE_DATE = "release_date";
 	private static final String STATUS = "status";
+	private static final String AVERAGE_RATING = "average_rating";
+	private static final String MESSAGE = "Unable to fetch movie details ";
+	private static final String SELECT = "select m.movie_id,m.movie_name,m.release_date,m.status ,a.average_rating from movies m ";
+	private static final String SUBQUERY = "select movie_id ,round(avg(rating),2) as average_rating from rating_by_user group by movie_id";
 
 	private MovieDAO() {
 
@@ -37,7 +41,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<Movie> findAll() throws DBException {
+	public static List<Movie> findAllExceptRatings() throws DBException {
 		List<Movie> list = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -62,7 +66,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch the movie detail");
+			throw new DBException(e, MESSAGE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -205,7 +209,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<MovieRating> findAllWithRating() throws DBException {
+	public static List<MovieRating> findAllOrderByAverageRatingDesc() throws DBException {
 		List<MovieRating> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -213,9 +217,8 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status ,a.average_rating from movies m \r\n"
-					+ "inner join (select movie_id ,avg(rating) as average_rating from rating_by_user group by movie_id ) \r\n"
-					+ "as a on m.movie_id = a.movie_id order by a.average_rating desc;\r\n";
+			String sql = SELECT + "inner join (" + SUBQUERY
+					+ ") as a on m.movie_id = a.movie_id order by a.average_rating desc;\r\n";
 
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
@@ -225,7 +228,7 @@ public class MovieDAO {
 				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean(STATUS);
-				double rate = rs.getDouble("average_rating");
+				double rate = rs.getDouble(AVERAGE_RATING);
 				Movie movie = new Movie(id, name, getStartDate, active);
 
 				MovieRating rating = new MovieRating(movie, rate);
@@ -235,7 +238,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch movie details ");
+			throw new DBException(e, MESSAGE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -252,7 +255,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static MovieRating findAllWithRatingByMovieId(Integer movieId) throws DBException {
+	public static MovieRating findByMovieId(Integer movieId) throws DBException {
 		MovieRating rating = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -260,9 +263,9 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select m.movie_id,m.movie_name,m.release_date,m.status ,a.average_rating from movies m \r\n"
-					+ "inner join (select movie_id ,avg(rating) as average_rating from rating_by_user where \r\n"
-					+ "movie_id =? group by movie_id ) as a on m.movie_id = ?";
+			String sql = SELECT
+					+ "inner join (select movie_id ,round(avg(rating),2) as average_rating from rating_by_user"
+					+ " where movie_id =? group by movie_id ) as a on m.movie_id = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			pst.setInt(2, movieId);
@@ -273,7 +276,7 @@ public class MovieDAO {
 				Date releaseDate = rs.getDate(RELEASE_DATE);
 				LocalDate getStartDate = releaseDate.toLocalDate();
 				boolean active = rs.getBoolean(STATUS);
-				double rate = rs.getDouble("average_rating");
+				double rate = rs.getDouble(AVERAGE_RATING);
 				Movie movie = new Movie(id, name, getStartDate, active);
 
 				rating = new MovieRating(movie, rate);
@@ -282,12 +285,56 @@ public class MovieDAO {
 		} catch (SQLException | NullPointerException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch movie details ");
+			throw new DBException(e, MESSAGE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
 		}
 		return rating;
+
+	}
+
+	/**
+	 * This method returns all the details of the movie
+	 * 
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static List<MovieRating> findAll() throws DBException {
+		List<MovieRating> movieRating = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = SELECT + " inner join (" + SUBQUERY + " ) as a on m.movie_id = a.movie_id;";
+
+			pst = connection.prepareStatement(sql);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(MOVIE_ID);
+				String name = rs.getString(MOVIE_NAME);
+				Date releaseDate = rs.getDate(RELEASE_DATE);
+				LocalDate getStartDate = releaseDate.toLocalDate();
+				boolean active = rs.getBoolean(STATUS);
+				double rate = rs.getDouble(AVERAGE_RATING);
+				Movie movie = new Movie(id, name, getStartDate, active);
+
+				MovieRating rating = new MovieRating(movie, rate);
+				movieRating.add(rating);
+
+			}
+		} catch (SQLException e) {
+
+			Logger.trace(e);
+			throw new DBException(e, MESSAGE);
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+
+		}
+		return movieRating;
 
 	}
 

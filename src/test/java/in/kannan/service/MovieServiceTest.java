@@ -57,9 +57,9 @@ public class MovieServiceTest {
 	//	displayMovieDetail();
 	//	String date = "2021-05-03";
 	//	MovieService.save("Dola", date, true);
-	//	MovieService.removeMovie("Sencholai");
-    //    System.out.println(MovieService.getAll());
-		MovieService.removeMovie("Kathi");
+		MovieService.removeMovie("Chakra ");
+   //     System.out.println(MovieService.getAll());
+	//	MovieService.removeMovie("Kathi");
 	//	displayMovieWithRating();
 	//	System.out.println(MovieService.findByMovieName("Sangathalaivan"));
 	//	System.out.println(MovieService.getMoviesWithRating());

@@ -9,14 +9,18 @@ public class MovieDAOTest {
 	public static void main(String[] args) throws DBException {
 		// MovieRatingDAO.remove(10);
 		// MovieDAO.findAllWithRating();
-		List<Movie> movieList = MovieDAO.findAllExceptRatings();
+	//	List<Movie> movieList = MovieDAO.findByMovieId();
 	//	System.out.println(movieList);
-		for (Movie movie : movieList) {
-			System.out.println(movie);
-		}
-		System.out.println(MovieDAO.findAllExceptRatings());
+//		for (Movie movie : movieList) {
+//			System.out.println(movie);
+//		}
+//		System.out.println(MovieDAO.findByMovieId());
+	
 
+		
+		
 		//System.out.println(MovieDAO.findByMovieId("Karnan"));
 	}
 
+	
 }

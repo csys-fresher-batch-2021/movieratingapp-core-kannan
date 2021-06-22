@@ -240,4 +240,36 @@ public class UserRatingDAO {
 
 	}
 
+	/**
+	 * This method counts the number of users rated for the particular movie id
+	 * 
+	 * @param movieId
+	 * @return counting of users rated
+	 * @throws DBException
+	 */
+
+	public static Integer countByMovieId(Integer movieId) throws DBException {
+		Integer count = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select count(movie_id) as users_rated from rating_by_user where movie_id = ? and user_id is not null";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, movieId);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt("users_rated");
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to count the data");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return count;
+	}
+
 }

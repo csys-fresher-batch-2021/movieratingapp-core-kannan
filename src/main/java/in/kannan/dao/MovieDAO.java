@@ -41,7 +41,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<Movie> findAllExceptRatings() throws DBException {
+	public static List<Movie> findAllByOrderByMovieId() throws DBException {
 		List<Movie> list = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -83,7 +83,7 @@ public class MovieDAO {
 	 * @throws ValidationException
 	 */
 
-	public static Movie exist(String movieName) throws ValidationException {
+	public static Movie findMovieNameByExactMovieName(String movieName) throws ValidationException {
 		Movie movie = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -148,7 +148,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static Integer findByMovieId(String movieName) throws DBException {
+	public static Integer findMovieIdByExactMovieName(String movieName) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -209,7 +209,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<MovieRating> findAllOrderByAverageRatingDesc() throws DBException {
+	public static List<MovieRating> findByMovieIdOrderByAverageRatingDesc() throws DBException {
 		List<MovieRating> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -217,10 +217,14 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = SELECT + "inner join (" + SUBQUERY
-					+ ") as a on m.movie_id = a.movie_id order by a.average_rating desc;\r\n";
+			StringBuilder sql = new StringBuilder();
+			sql.append(SELECT);
+			sql.append(" inner join (");
+			sql.append(SUBQUERY);
+			sql.append(") as a on m.movie_id = a.movie_id order by a.average_rating desc ");
+			String sq = sql.toString();
 
-			pst = connection.prepareStatement(sql);
+			pst = connection.prepareStatement(sq);
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Integer id = rs.getInt(MOVIE_ID);
@@ -263,10 +267,12 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = SELECT
-					+ "inner join (select movie_id ,round(avg(rating),2) as average_rating from rating_by_user"
-					+ " where movie_id =? group by movie_id ) as a on m.movie_id = ?";
-			pst = connection.prepareStatement(sql);
+			StringBuilder sql = new StringBuilder();
+			sql.append(SELECT);
+			sql.append("inner join (select movie_id ,round(avg(rating),2) as average_rating from rating_by_user");
+			sql.append(" where movie_id =? group by movie_id ) as a on m.movie_id = ?");
+			String sq = sql.toString();
+			pst = connection.prepareStatement(sq);
 			pst.setInt(1, movieId);
 			pst.setInt(2, movieId);
 			rs = pst.executeQuery();
@@ -301,7 +307,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<MovieRating> findAll() throws DBException {
+	public static List<MovieRating> findByMovieId() throws DBException {
 		List<MovieRating> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -309,9 +315,14 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = SELECT + " inner join (" + SUBQUERY + " ) as a on m.movie_id = a.movie_id;";
+			StringBuilder sql = new StringBuilder();
+			sql.append(SELECT);
+			sql.append(" inner join (");
+			sql.append(SUBQUERY);
+			sql.append(" ) as a on m.movie_id = a.movie_id");
+			String sq = sql.toString();
 
-			pst = connection.prepareStatement(sql);
+			pst = connection.prepareStatement(sq);
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				Integer id = rs.getInt(MOVIE_ID);

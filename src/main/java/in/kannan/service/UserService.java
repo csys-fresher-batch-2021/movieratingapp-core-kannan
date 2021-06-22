@@ -22,9 +22,8 @@ public class UserService {
 	 * @param email
 	 * @param password
 	 * @throws ServiceException
-	 * @throws ValidationException
 	 */
-	public static User adminLogin(String email, String password) throws ServiceException, ValidationException {
+	public static User adminLogin(String email, String password) throws ServiceException {
 		User user = null;
 		try {
 
@@ -53,9 +52,8 @@ public class UserService {
 	 * @param email
 	 * @param password
 	 * @throws ServiceException
-	 * @throws ValidationException
 	 */
-	public static User userLogin(String email, String password) throws ServiceException, ValidationException {
+	public static User userLogin(String email, String password) throws ServiceException {
 		User user = null;
 		try {
 

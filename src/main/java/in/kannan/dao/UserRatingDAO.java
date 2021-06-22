@@ -54,6 +54,38 @@ public class UserRatingDAO {
 	}
 
 	/**
+	 * This method saves the data into the database.
+	 * 
+	 * @param userId
+	 * @param movieId
+	 * @param rating
+	 * @throws DBException
+	 */
+
+	public static void addMovieId(Integer movieId) throws DBException {
+
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "insert into rating_by_user(movie_id) values (?)";
+			pst = connection.prepareStatement(sql);
+
+			pst.setInt(1, movieId);
+
+			pst.execute();
+
+		} catch (SQLException e) {
+
+			Logger.trace(e);
+			throw new DBException("Failed to save the data");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+		}
+
+	}
+
+	/**
 	 * check the proper insertion into table.
 	 * 
 	 * @param ps
@@ -171,12 +203,73 @@ public class UserRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to delete the movie ");
+			throw new DBException("Failed to delete the id ");
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
 		}
 
+	}
+
+	/**
+	 * This method removes a particular data under the given movie id and user id
+	 * 
+	 * @param userId
+	 * @param movieId
+	 * @throws DBException
+	 */
+
+	public static void remove(Integer userId, Integer movieId) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "delete from rating_by_user where user_id=? and movie_id =?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, userId);
+			pst.setInt(2, movieId);
+			pst.executeUpdate();
+
+		} catch (ConnectionException | SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Failed to delete the data ");
+		} finally {
+			ConnectionUtil.close(pst, connection);
+
+		}
+
+	}
+
+	/**
+	 * This method counts the number of users rated for the particular movie id
+	 * 
+	 * @param movieId
+	 * @return counting of users rated
+	 * @throws DBException
+	 */
+
+	public static Integer countByMovieId(Integer movieId) throws DBException {
+		Integer count = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select count(movie_id) as users_rated from rating_by_user where movie_id = ? and user_id is not null";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, movieId);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt("users_rated");
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to count the data");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return count;
 	}
 
 }

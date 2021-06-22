@@ -10,6 +10,33 @@ public class UserValidator {
 		// private constructor to hide the implicit class
 	}
 
+	public static boolean isValidUserName(String userName) {
+		boolean isValid = false;
+
+		if (userName != null) {
+			isValid = true;
+
+			if (userName.trim().equals("") || userName.length() > 30) {
+				isValid = false;
+			}
+
+			String exceptions = "!@#$%^&*()_+},=-`~{:1234567890?/><";
+
+			for (int i = 0; i < userName.trim().length(); i++) {
+				char c = userName.trim().charAt(i);
+				for (int j = 0; j < exceptions.length(); j++) {
+					char d = exceptions.charAt(j);
+					if (c == d) {
+						isValid = false;
+					}
+				}
+			}
+
+		}
+		return isValid;
+
+	}
+
 	/**
 	 * Validates the email using regular expression pattern.
 	 * 
@@ -41,9 +68,9 @@ public class UserValidator {
 	public static boolean isValidPassword(String password) {
 		boolean isValid = false;
 		/**
-		 * it must contain at least one of the followings are number,lower case
-		 * Variable,upper case variable,special characters and length should be greater
-		 * than 8 and less than 20.
+		 * it must contain at least one number,lower case Variable,upper case
+		 * variable,special characters and length should be greater than 8 and less than
+		 * 20.
 		 */
 		String pattern = "^(?=.*[0-9])" + "(?=.*[a-z])(?=.*[A-Z])" + "(?=.*[@#$%^&+=])" + "(?=\\S+$).{8,20}$";
 
@@ -59,6 +86,14 @@ public class UserValidator {
 
 	}
 
+	public static boolean isValidRole(String role) {
+		boolean isValid = false;
+		if (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("USER")) {
+			isValid = true;
+		}
+		return isValid;
+	}
+
 	/**
 	 * Validates the user details if incorrect it throws the exception.
 	 * 
@@ -67,13 +102,19 @@ public class UserValidator {
 	 * @throws ValidationException
 	 */
 
-	public static void validateLoginCredentials(String email, String password) throws ValidationException {
+	public static void validateUserDetails(String userName, String email, String password, String role)
+			throws ValidationException {
+		if (!isValidUserName(userName)) {
+			throw new ValidationException("Invalid User Name");
+		}
 
-		if (!isValidEmail(email)) {
+		else if (!isValidEmail(email)) {
 			throw new ValidationException("Invalid email format ");
 		} else if (!isValidPassword(password)) {
 			throw new ValidationException("Invalid password format ");
 
+		} else if (!isValidRole(role)) {
+			throw new ValidationException("Invalid role");
 		}
 
 	}

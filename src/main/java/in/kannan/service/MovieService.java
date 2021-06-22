@@ -27,9 +27,9 @@ public class MovieService {
 	 * @return movie details list
 	 * @throws
 	 */
-	public static List<Movie> getMovies() throws ServiceException {
+	public static List<Movie> getAllExceptRatings() throws ServiceException {
 		try {
-			return MovieDAO.findAll();
+			return MovieDAO.findAllByOrderByMovieId();
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -48,19 +48,22 @@ public class MovieService {
 	 * @throws ValidationException
 	 */
 
-	public static void addMovie(String movieName, String releaseDate, boolean status)
+	public static void save(String movieName, String releaseDate, boolean status)
 			throws ServiceException, ValidationException {
 
 		try {
+			String newMovieName = movieName.trim();
 
-			MovieValidator.validateMovie(movieName, releaseDate);
+			MovieValidator.validateMovie(newMovieName, releaseDate);
 			LocalDate date = LocalDate.parse(releaseDate);
-			Movie movie = MovieDAO.exist(movieName);
+			Movie movie = MovieDAO.findMovieNameByExactMovieName(newMovieName);
 			if (movie != null) {
 				throw new ServiceException("Movie Already Registered");
 			}
 
-			MovieDAO.save(movieName, date, status);
+			MovieDAO.save(newMovieName, date, status);
+			Integer movieId = MovieDAO.findMovieIdByExactMovieName(newMovieName);
+			UserRatingDAO.addMovieId(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -77,14 +80,16 @@ public class MovieService {
 	 */
 	public static void removeMovie(String movieName) throws ServiceException {
 		try {
-			MovieValidator.validateMovieName(movieName);
-			Movie movie = MovieDAO.exist(movieName);
-			if (movie == null) {
-				throw new ServiceException("This movie is not registered");
+			String newMovieName = movieName.trim();
+			MovieValidator.validateMovieName(newMovieName);
+
+			Integer movieId = MovieDAO.findMovieIdByExactMovieName(newMovieName);
+			if (movieId == null) {
+				throw new ServiceException("Movie is not registered");
 			}
-			Integer movieId = MovieDAO.findByMovieId(movieName);
+
 			UserRatingDAO.remove(movieId);
-			MovieDAO.remove(movieName);
+			MovieDAO.remove(newMovieName);
 
 		} catch (ValidationException | DBException e) {
 			Logger.trace(e);
@@ -102,7 +107,25 @@ public class MovieService {
 	public static List<MovieRating> getMoviesWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findAllWithRating();
+			return MovieDAO.findByMovieIdOrderByAverageRatingDesc();
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException("Sorry unable to fetch the detail");
+		}
+
+	}
+
+	/**
+	 * This method returns the movie detail with rating
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+
+	public static List<MovieRating> getAll() throws ServiceException {
+
+		try {
+			return MovieDAO.findByMovieId();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to fetch the detail");
@@ -119,13 +142,16 @@ public class MovieService {
 	 * @throws ValidationException
 	 */
 
-	public static MovieRating getMovieDetail(String movieName) throws ServiceException, ValidationException {
+	public static MovieRating findByMovieName(String movieName) throws ServiceException, ValidationException {
 
 		try {
 			MovieValidator.validateMovieName(movieName);
-			Integer movieId = MovieDAO.findByMovieId(movieName);
+			Integer movieId = MovieDAO.findMovieIdByExactMovieName(movieName);
+			if (movieId == null) {
+				throw new ServiceException("Movie is Not Registered ");
+			}
 
-			return MovieDAO.findAllWithRatingByMovieId(movieId);
+			return MovieDAO.findByMovieId(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);

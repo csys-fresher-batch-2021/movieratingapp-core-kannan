@@ -10,6 +10,15 @@ public class UserValidator {
 		// private constructor to hide the implicit class
 	}
 
+	/**
+	 * This method validates the userName returns false if the userName contains
+	 * special character ,number and any invalid details .The length of the user
+	 * name must be less than 30 and should not be null
+	 * 
+	 * @param userName
+	 * @return
+	 */
+
 	public static boolean isValidUserName(String userName) {
 		boolean isValid = false;
 
@@ -85,6 +94,13 @@ public class UserValidator {
 		return isValid;
 
 	}
+
+	/**
+	 * This method validates the role returns if the role is only "ADMIN" or "USER"
+	 * 
+	 * @param role
+	 * @return
+	 */
 
 	public static boolean isValidRole(String role) {
 		boolean isValid = false;

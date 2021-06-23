@@ -39,6 +39,41 @@ public class RatingValidator {
 	}
 
 	/**
+	 * This method validates the movie name avoids special characters, numbers,null
+	 * value,white space and length of the movie name must not exceed 30 characters.
+	 * 
+	 * @param movieName
+	 * @return boolean value
+	 */
+
+	public static boolean isValidMovieName(String movieName) {
+		boolean isValid = false;
+
+		if (movieName != null) {
+			isValid = true;
+
+			if (movieName.trim().equals("") || movieName.length() > 30) {
+				isValid = false;
+			}
+
+			String exceptions = "!@#$%^&*()_+},=-`~{:1234567890?/><";
+
+			for (int i = 0; i < movieName.trim().length(); i++) {
+				char c = movieName.trim().charAt(i);
+				for (int j = 0; j < exceptions.length(); j++) {
+					char d = exceptions.charAt(j);
+					if (c == d) {
+						isValid = false;
+					}
+				}
+			}
+
+		}
+		return isValid;
+
+	}
+
+	/**
 	 * Validates user input.If invalid throws exception
 	 * 
 	 * @param userId
@@ -53,6 +88,38 @@ public class RatingValidator {
 		} else if (!isValidId(movieId)) {
 			throw new ValidationException("Invalid movie Id");
 		} else if (!isValidRating(rating)) {
+			throw new ValidationException("Rating should be between 1 and 10");
+		}
+	}
+
+	/**
+	 * Validates user input.If invalid throws exception
+	 * 
+	 * @param userId
+	 * @param movieId
+	 * @param rating
+	 * @throws ValidationException
+	 */
+
+	public static void validateRating(Integer rating, String movieName) throws ValidationException {
+		if (!isValidRating(rating)) {
+			throw new ValidationException("Rating should be between 1 and 10");
+		} else if (!isValidMovieName(movieName)) {
+			throw new ValidationException("Invalid Movie Name");
+		}
+	}
+
+	/**
+	 * Validates user input.If invalid throws exception
+	 * 
+	 * @param userId
+	 * @param movieId
+	 * @param rating
+	 * @throws ValidationException
+	 */
+
+	public static void validateRating(Integer rating) throws ValidationException {
+		if (!isValidRating(rating)) {
 			throw new ValidationException("Rating should be between 1 and 10");
 		}
 	}

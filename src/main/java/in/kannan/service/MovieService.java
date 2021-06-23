@@ -5,6 +5,7 @@ import java.util.List;
 
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserRatingDAO;
+import in.kannan.dto.CountRating;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
@@ -12,6 +13,7 @@ import in.kannan.model.Movie;
 import in.kannan.model.MovieRating;
 import in.kannan.util.Logger;
 import in.kannan.validator.MovieValidator;
+import in.kannan.validator.RatingValidator;
 
 public class MovieService {
 	/**
@@ -29,7 +31,7 @@ public class MovieService {
 	 */
 	public static List<Movie> getAllExceptRatings() throws ServiceException {
 		try {
-			return MovieDAO.findAllByOrderByMovieId();
+			return MovieDAO.findAllOrderByMovieId();
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -62,7 +64,7 @@ public class MovieService {
 			}
 
 			MovieDAO.save(newMovieName, date, status);
-			Integer movieId = MovieDAO.findMovieIdByExactMovieName(newMovieName);
+			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
 			UserRatingDAO.addMovieId(movieId);
 
 		} catch (DBException e) {
@@ -83,13 +85,13 @@ public class MovieService {
 			String newMovieName = movieName.trim();
 			MovieValidator.validateMovieName(newMovieName);
 
-			Integer movieId = MovieDAO.findMovieIdByExactMovieName(newMovieName);
+			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie is not registered");
 			}
 
 			UserRatingDAO.remove(movieId);
-			MovieDAO.remove(newMovieName);
+			MovieDAO.remove(movieId);
 
 		} catch (ValidationException | DBException e) {
 			Logger.trace(e);
@@ -146,7 +148,7 @@ public class MovieService {
 
 		try {
 			MovieValidator.validateMovieName(movieName);
-			Integer movieId = MovieDAO.findMovieIdByExactMovieName(movieName);
+			Integer movieId = MovieDAO.findMovieIdByMovieName(movieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie is Not Registered ");
 			}
@@ -156,6 +158,44 @@ public class MovieService {
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to find Movie Details");
+		}
+
+	}
+
+	/**
+	 * This method returns the number of users rated with the list of movies above
+	 * the given rating value
+	 * 
+	 * @param rating
+	 * @return
+	 * @throws ServiceException
+	 */
+
+	public static List<CountRating> getMovieAndRatingByRating(Integer rating) throws ServiceException {
+		try {
+			return MovieDAO.findMovieAndRatingByRating(rating);
+		} catch (DBException e) {
+			throw new ServiceException("Sorry unable to count the user's rating");
+		}
+	}
+
+	/**
+	 * This method returns the sorting list of movies according to average rating
+	 * for the given rating
+	 * 
+	 * @param averageRating
+	 * @return sorted movies
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
+
+	public static List<MovieRating> findMovieByAverageRating(Integer averageRating)
+			throws ValidationException, ServiceException {
+		try {
+			RatingValidator.validateRating(averageRating);
+			return MovieDAO.findMovieByAverageRating(averageRating);
+		} catch (DBException e) {
+			throw new ServiceException("Unable to Sort the movie");
 		}
 
 	}

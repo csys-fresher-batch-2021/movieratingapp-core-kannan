@@ -20,7 +20,7 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 */
 	public static void displayMovieDetail() throws ServiceException {
-		List<Movie> list = MovieService.getAllExceptRatings();
+		List<Movie> list = MovieService.getAllMovies();
 		for (Movie movie : list) {
 			System.out.println(movie);
 
@@ -54,34 +54,34 @@ public class MovieServiceTest {
 	public static void main(String[] args) throws ServiceException, ValidationException {
 
 		// This method prints the only the movie detail without rating.
-		displayMovieDetail();
+		// displayMovieDetail();
 		// String date = "2021-05-03";
 
 		// This method saves the data
-		MovieService.save("Dola", null, true);
+		// MovieService.addMovie("Dola", null, true);
 
 		// This method returns all movie along with their rating without order.
-		System.out.println(MovieService.getAll());
+		System.out.println(MovieService.getAllMovieWithRating());
 
 		// This method deletes the particular movie
-		MovieService.removeMovie("Kathi");
+		// MovieService.removeMovie("Kathi");
 
 		// It displays all the details of the movie along with their average rating in
 		// descending order
-		displayMovieWithRating();
+		// displayMovieWithRating();
 
 		// It prints the details of the particular movie along with their average rating
-		System.out.println(MovieService.findByMovieName("Sangathalaivan"));
+		// System.out.println(MovieService.getMovieWithRatingByMovieName("Sangathalaivan"));
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)
-		System.out.println(MovieService.getMoviesWithRating());
+		// System.out.println(MovieService.getMoviesWithRating());
 
 		// counts number of user rated 8 and above 8 for all the movie
-		System.out.println(MovieService.getMovieAndRatingByRating(8));
+		// System.out.println(MovieService.getMovieAndRatingByRating(8));
 
 		// It prints the movie with average rating greater than and equal to 6
-		System.out.println(MovieService.findMovieByAverageRating(6));
+		// System.out.println(MovieService.getMovieByAverageRating(6));
 
 	}
 

@@ -1,8 +1,11 @@
 package in.kannan.service;
 
+import java.util.List;
+
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
+import in.kannan.dto.MovieRatingDTO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
@@ -29,7 +32,7 @@ public class RatingService {
 	 * @throws ServiceException
 	 */
 
-	public static void addUsersRating(Integer userId, Integer movieId, Integer rating) throws ServiceException {
+	public static void addUserRating(Integer userId, Integer movieId, Integer rating) throws ServiceException {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
 			UserRating userRating = UserRatingDAO.exist(userId, movieId);
@@ -95,6 +98,17 @@ public class RatingService {
 		return count;
 	}
 
+	/**
+	 * This method counts number of user rated for the particular movie and
+	 * particular rating.
+	 * 
+	 * @param rating
+	 * @param movieName
+	 * @return
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
+
 	public static Integer countRatingByRatingAndMovieName(Integer rating, String movieName)
 			throws ValidationException, ServiceException {
 		RatingValidator.validateRating(rating, movieName);
@@ -105,13 +119,41 @@ public class RatingService {
 			if (movieId == null) {
 				throw new ServiceException("Movie Not found");
 			}
-			count = UserRatingDAO.counbtRatingByRatingAndMovieId(rating, movieId);
+			count = UserRatingDAO.countRatingByRatingAndMovieId(rating, movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to count the particular rating for particular movie ");
 		}
 		return count;
+
+	}
+
+	/**
+	 * This method prints the list as number of user rated for the particular movie
+	 * for particular rating.
+	 * 
+	 * @param movieName
+	 * @return
+	 * @throws ServiceException
+	 * @throws ValidationException
+	 */
+
+	public static List<MovieRatingDTO> getRatingCountByMovieName(String movieName)
+			throws ServiceException, ValidationException {
+		MovieValidator.validateMovieName(movieName);
+		String newMovieName = movieName.trim();
+		try {
+			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			if (movieId == null) {
+				throw new ServiceException("Sorry Movie Not Registered");
+			}
+
+			return UserRatingDAO.countRatingByMovieIdOrderByRatingDesc(movieId);
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException("Sorry Unable to count the data");
+		}
 
 	}
 

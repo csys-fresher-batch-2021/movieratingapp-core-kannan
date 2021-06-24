@@ -2,11 +2,11 @@ package in.kannan.dto;
 
 import in.kannan.model.Movie;
 
-public class CountRating {
+public class MovieRatingCountDTO {
 	private Movie movie;
 	private Integer count;
 
-	public CountRating(Movie movie, Integer count) {
+	public MovieRatingCountDTO(Movie movie, Integer count) {
 		super();
 		this.movie = movie;
 		this.count = count;

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.kannan.dto.MovieRatingDTO;
 import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
 import in.kannan.model.MovieRating;
@@ -272,7 +273,17 @@ public class UserRatingDAO {
 		return count;
 	}
 
-	public static Integer counbtRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException {
+	/**
+	 * This method counts number of user rated for the particular movie and
+	 * particular rating
+	 * 
+	 * @param rating
+	 * @param movieId
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static Integer countRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException {
 		Integer count = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -295,5 +306,42 @@ public class UserRatingDAO {
 			ConnectionUtil.close(rs, pst, connection);
 		}
 		return count;
+	}
+
+	/**
+	 * This method counts the number of user rated for particular rating for the
+	 * particular movie.Input is the movie name for which each rating and number fo
+	 * user rated is calculated.
+	 * 
+	 * @param movieId
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static List<MovieRatingDTO> countRatingByMovieIdOrderByRatingDesc(Integer movieId) throws DBException {
+		List<MovieRatingDTO> counting = new ArrayList<>();
+		MovieRatingDTO counts = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select rating,count(user_id) from rating_by_user where movie_id =? and user_id is not null group by rating order by rating desc ";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, movieId);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Double rating = rs.getDouble("rating");
+				Integer count = rs.getInt("count");
+				counts = new MovieRatingDTO(rating, count);
+				counting.add(counts);
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Sorry Unable to count the data");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return counting;
 	}
 }

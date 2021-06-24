@@ -1,13 +1,12 @@
 package in.kannan.service;
 
 import in.kannan.dao.UserDAO;
-import in.kannan.validator.UserValidator;
-
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
+import in.kannan.validator.UserValidator;
 
 public class UserService {
 	private UserService() {
@@ -76,9 +75,16 @@ public class UserService {
 
 	public static void userRegistration(String userName, String email, String password, String role)
 			throws ValidationException, ServiceException {
+		User user = null;
 		try {
 			UserValidator.validateUserDetails(userName, email, password, role);
-			UserDAO.save(userName, email, password, role);
+			user = new User();
+			user.setName(userName);
+			user.setEmail(email);
+			user.setPassword(password);
+			user.setRole(role);
+
+			UserDAO.save(user);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry Unable to register");

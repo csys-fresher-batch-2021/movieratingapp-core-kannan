@@ -103,7 +103,7 @@ public class UserDAO {
 	}
 
 	/**
-	 * This method saves the data into the database.
+	 * This method saves the data .
 	 * 
 	 * @param userName
 	 * @param email
@@ -112,13 +112,17 @@ public class UserDAO {
 	 * @throws DBException
 	 */
 
-	public static void save(String userName, String email, String password, String role) throws DBException {
+	public static void save(User user) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
 			String sql = "insert into users (name,email,password,role) values (?,?,?,?)";
 			pst = connection.prepareStatement(sql);
+			String userName = user.getName();
+			String email = user.getEmail();
+			String password = user.getPassword();
+			String role = user.getRole();
 			pst.setString(1, userName);
 			pst.setString(2, email);
 			pst.setString(3, password);

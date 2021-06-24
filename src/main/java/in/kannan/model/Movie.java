@@ -3,6 +3,11 @@ package in.kannan.model;
 import java.time.LocalDate;
 
 public class Movie {
+	public Movie() {
+		super();
+
+	}
+
 	private Integer id;
 	private String name;
 	private LocalDate releaseDate;

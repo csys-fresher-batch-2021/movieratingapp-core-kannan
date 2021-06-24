@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.kannan.dto.CountRating;
+import in.kannan.dto.MovieRatingCountDTO;
 import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ValidationException;
@@ -77,7 +77,7 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method checks the presence of movie in the database.
+	 * This method checks the presence of movie.
 	 * 
 	 * @param movieName
 	 * @return
@@ -110,7 +110,7 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method inserts the movie detail into the database.
+	 * This method save the movie detail .
 	 * 
 	 * @param movieName
 	 * @param releaseDate
@@ -119,7 +119,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static void save(String movieName, LocalDate releaseDate, boolean status) throws DBException {
+	public static void save(Movie movie) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -127,6 +127,9 @@ public class MovieDAO {
 			connection = ConnectionUtil.getConnection();
 			String sql = "insert into movies (movie_name,release_date,status) values (?,?,?)";
 			pst = connection.prepareStatement(sql);
+			String movieName = movie.getName();
+			LocalDate releaseDate = movie.getReleaseDate();
+			boolean status = movie.getStatus();
 			pst.setString(1, movieName);
 			Date date = Date.valueOf(releaseDate);
 			pst.setDate(2, date);
@@ -219,10 +222,13 @@ public class MovieDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 			StringBuilder sql = new StringBuilder();
-			sql.append(SELECT);
-			sql.append(" inner join (");
-			sql.append(SUBQUERY);
-			sql.append(") as a on m.movie_id = a.movie_id order by a.average_rating desc ");
+			sql.append(
+					"select  m.movie_id,m.movie_name,m.release_date,m.status, (case when a.round is null then 0 else a.round end )");
+			sql.append(
+					" as average_rating from movies m inner join(select movie_id,round(avg(rating) filter (where rating>0),2)");
+			sql.append(
+					"from rating_by_user group by movie_id ) as a on m.movie_id=a.movie_id order by average_rating desc");
+
 			String sq = sql.toString();
 
 			pst = connection.prepareStatement(sq);
@@ -359,8 +365,8 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<CountRating> findMovieAndRatingByRating(Integer rating) throws DBException {
-		List<CountRating> movieRating = new ArrayList<>();
+	public static List<MovieRatingCountDTO> findMovieAndRatingByRating(Integer rating) throws DBException {
+		List<MovieRatingCountDTO> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -384,7 +390,7 @@ public class MovieDAO {
 				Integer count = rs.getInt("count");
 				Movie movie = new Movie(movieId, movieName, releaseDate, status);
 
-				CountRating countRating = new CountRating(movie, count);
+				MovieRatingCountDTO countRating = new MovieRatingCountDTO(movie, count);
 				movieRating.add(countRating);
 			}
 

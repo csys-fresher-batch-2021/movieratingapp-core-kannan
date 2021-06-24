@@ -7,6 +7,11 @@ public class User {
 	private String password;
 	private String role;
 
+	public User() {
+		super();
+
+	}
+
 	public User(String role) {
 		super();
 		this.role = role;

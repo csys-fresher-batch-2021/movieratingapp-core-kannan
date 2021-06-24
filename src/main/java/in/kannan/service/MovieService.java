@@ -5,7 +5,7 @@ import java.util.List;
 
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserRatingDAO;
-import in.kannan.dto.CountRating;
+import in.kannan.dto.MovieRatingCountDTO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
@@ -29,7 +29,7 @@ public class MovieService {
 	 * @return movie details list
 	 * @throws
 	 */
-	public static List<Movie> getAllExceptRatings() throws ServiceException {
+	public static List<Movie> getAllMovies() throws ServiceException {
 		try {
 			return MovieDAO.findAllOrderByMovieId();
 
@@ -50,20 +50,23 @@ public class MovieService {
 	 * @throws ValidationException
 	 */
 
-	public static void save(String movieName, String releaseDate, boolean status)
+	public static void addMovie(String movieName, String releaseDate, boolean status)
 			throws ServiceException, ValidationException {
 
 		try {
 			String newMovieName = movieName.trim();
-
 			MovieValidator.validateMovie(newMovieName, releaseDate);
 			LocalDate date = LocalDate.parse(releaseDate);
 			Movie movie = MovieDAO.findMovieNameByExactMovieName(newMovieName);
 			if (movie != null) {
 				throw new ServiceException("Movie Already Registered");
 			}
+			Movie movieDetail = new Movie();
+			movieDetail.setName(newMovieName);
+			movieDetail.setReleaseDate(date);
+			movieDetail.setStatus(status);
 
-			MovieDAO.save(newMovieName, date, status);
+			MovieDAO.save(movieDetail);
 			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
 			UserRatingDAO.addMovieId(movieId);
 
@@ -124,7 +127,7 @@ public class MovieService {
 	 * @throws ServiceException
 	 */
 
-	public static List<MovieRating> getAll() throws ServiceException {
+	public static List<MovieRating> getAllMovieWithRating() throws ServiceException {
 
 		try {
 			return MovieDAO.findByMovieId();
@@ -144,7 +147,8 @@ public class MovieService {
 	 * @throws ValidationException
 	 */
 
-	public static MovieRating findByMovieName(String movieName) throws ServiceException, ValidationException {
+	public static MovieRating getMovieWithRatingByMovieName(String movieName)
+			throws ServiceException, ValidationException {
 
 		try {
 			MovieValidator.validateMovieName(movieName);
@@ -171,7 +175,7 @@ public class MovieService {
 	 * @throws ServiceException
 	 */
 
-	public static List<CountRating> getMovieAndRatingByRating(Integer rating) throws ServiceException {
+	public static List<MovieRatingCountDTO> getMovieAndRatingByRating(Integer rating) throws ServiceException {
 		try {
 			return MovieDAO.findMovieAndRatingByRating(rating);
 		} catch (DBException e) {
@@ -189,7 +193,7 @@ public class MovieService {
 	 * @throws ServiceException
 	 */
 
-	public static List<MovieRating> findMovieByAverageRating(Integer averageRating)
+	public static List<MovieRating> getMovieByAverageRating(Integer averageRating)
 			throws ValidationException, ServiceException {
 		try {
 			RatingValidator.validateRating(averageRating);

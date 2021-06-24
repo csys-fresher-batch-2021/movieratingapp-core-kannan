@@ -83,7 +83,7 @@ public class RatingService {
 		MovieValidator.validateMovieName(newMovieName);
 		Integer count = null;
 		try {
-			Integer movieId = MovieDAO.findMovieIdByExactMovieName(newMovieName);
+			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie Not found");
 			}
@@ -93,6 +93,26 @@ public class RatingService {
 			throw new ServiceException("Sorry unable to count the user ratings for this movie");
 		}
 		return count;
+	}
+
+	public static Integer countRatingByRatingAndMovieName(Integer rating, String movieName)
+			throws ValidationException, ServiceException {
+		RatingValidator.validateRating(rating, movieName);
+		Integer count = null;
+		String newMovieName = movieName.trim();
+		try {
+			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			if (movieId == null) {
+				throw new ServiceException("Movie Not found");
+			}
+			count = UserRatingDAO.counbtRatingByRatingAndMovieId(rating, movieId);
+
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException("Sorry unable to count the particular rating for particular movie ");
+		}
+		return count;
+
 	}
 
 }

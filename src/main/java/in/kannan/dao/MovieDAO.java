@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.kannan.dto.CountRating;
 import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ValidationException;
@@ -41,7 +42,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<Movie> findAllByOrderByMovieId() throws DBException {
+	public static List<Movie> findAllOrderByMovieId() throws DBException {
 		List<Movie> list = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -148,7 +149,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static Integer findMovieIdByExactMovieName(String movieName) throws DBException {
+	public static Integer findMovieIdByMovieName(String movieName) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -176,20 +177,20 @@ public class MovieDAO {
 	}
 
 	/**
-	 * This method removes particular movie details from database.
+	 * This method removes particular movie details from database by using their Id.
 	 * 
 	 * @param movieName
 	 * @throws DBException
 	 */
 
-	public static void remove(String movieName) throws DBException {
+	public static void remove(Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "delete from movies where lower(movie_name) =lower(?)";
+			String sql = "delete from movies where movie_id = ? ";
 			pst = connection.prepareStatement(sql);
-			pst.setString(1, movieName);
+			pst.setInt(1, movieId);
 			pst.executeUpdate();
 
 		} catch (ConnectionException | SQLException e) {
@@ -347,6 +348,100 @@ public class MovieDAO {
 		}
 		return movieRating;
 
+	}
+
+	/**
+	 * This method returns the number of users rated with the list of movies above
+	 * the given rating value
+	 * 
+	 * @param rating
+	 * @return list containing movie's rated
+	 * @throws DBException
+	 */
+
+	public static List<CountRating> findMovieAndRatingByRating(Integer rating) throws DBException {
+		List<CountRating> movieRating = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			StringBuilder sql = new StringBuilder();
+			sql.append("select m.movie_id,m.movie_name,m.release_date,m.status,r.count from movies m inner join");
+			sql.append(
+					" (select movie_id,count(rating) from rating_by_user where rating>=? group by movie_id order by movie_id )");
+			sql.append(" r on m.movie_id=r.movie_id;");
+			String sq = sql.toString();
+			pst = connection.prepareStatement(sq);
+			pst.setInt(1, rating);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer movieId = rs.getInt(MOVIE_ID);
+				String movieName = rs.getString(MOVIE_NAME);
+				Date date = rs.getDate(RELEASE_DATE);
+				LocalDate releaseDate = date.toLocalDate();
+				boolean status = rs.getBoolean(STATUS);
+				Integer count = rs.getInt("count");
+				Movie movie = new Movie(movieId, movieName, releaseDate, status);
+
+				CountRating countRating = new CountRating(movie, count);
+				movieRating.add(countRating);
+			}
+
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to count the rating");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return movieRating;
+
+	}
+
+	/**
+	 * This method sorts according to average rating and returns the movie details
+	 * along with the average rating to user
+	 * 
+	 * @param rating
+	 * @return sorted list of movies
+	 * @throws DBException
+	 */
+
+	public static List<MovieRating> findMovieByAverageRating(Integer averageRating) throws DBException {
+		List<MovieRating> movieRating = new ArrayList<>();
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			StringBuilder sql = new StringBuilder();
+			sql.append(
+					"select m.movie_id,m.movie_name,m.release_date,m.status,a.average_rating from movies m inner join");
+			sql.append("(select movie_id,round(avg(rating),2) as average_rating from rating_by_user group by movie_id");
+			sql.append(" having round(avg(rating),2) >=? order by movie_id) as a on  m.movie_id=a.movie_id");
+			String sq = sql.toString();
+			pst = connection.prepareStatement(sq);
+			pst.setInt(1, averageRating);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				Integer movieId = rs.getInt(MOVIE_ID);
+				String movieName = rs.getString(MOVIE_NAME);
+				Date date = rs.getDate(RELEASE_DATE);
+				LocalDate releaseDate = date.toLocalDate();
+				boolean status = rs.getBoolean(STATUS);
+				double rating = rs.getDouble(AVERAGE_RATING);
+				Movie movie = new Movie(movieId, movieName, releaseDate, status);
+				MovieRating mRating = new MovieRating(movie, rating);
+				movieRating.add(mRating);
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to Sort");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return movieRating;
 	}
 
 }

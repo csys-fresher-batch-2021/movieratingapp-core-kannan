@@ -11,10 +11,7 @@ public class MovieRating {
 
 	private Double rating;
 
-
-	
-
-	public MovieRating(Movie movie,Double rating) {
+	public MovieRating(Movie movie, Double rating) {
 		super();
 		this.rating = rating;
 		this.movie = movie;

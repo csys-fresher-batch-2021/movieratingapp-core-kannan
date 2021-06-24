@@ -26,7 +26,7 @@ public class MovieServiceTest {
 
 		}
 	}
-	
+
 	/**
 	 * displays movie details
 	 * 
@@ -48,23 +48,41 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 * @throws AdminLoginException
 	 * @throws DBException
-	 * @throws ValidationException 
+	 * @throws ValidationException
 	 */
 
 	public static void main(String[] args) throws ServiceException, ValidationException {
-		
 
-	//	displayMovieDetail();
-	//	String date = "2021-05-03";
-	//	MovieService.save("Dola", date, true);
-		MovieService.removeMovie("Chakra ");
-   //     System.out.println(MovieService.getAll());
-	//	MovieService.removeMovie("Kathi");
-	//	displayMovieWithRating();
-	//	System.out.println(MovieService.findByMovieName("Sangathalaivan"));
-	//	System.out.println(MovieService.getMoviesWithRating());
-	//	System.out.println(MovieService.getMoviesWithRating());
-		
+		// This method prints the only the movie detail without rating.
+		displayMovieDetail();
+		// String date = "2021-05-03";
+
+		// This method saves the data
+		MovieService.save("Dola", null, true);
+
+		// This method returns all movie along with their rating without order.
+		System.out.println(MovieService.getAll());
+
+		// This method deletes the particular movie
+		MovieService.removeMovie("Kathi");
+
+		// It displays all the details of the movie along with their average rating in
+		// descending order
+		displayMovieWithRating();
+
+		// It prints the details of the particular movie along with their average rating
+		System.out.println(MovieService.findByMovieName("Sangathalaivan"));
+
+		// It prints all the movie list according to their average rating descending
+		// (high to low)
+		System.out.println(MovieService.getMoviesWithRating());
+
+		// counts number of user rated 8 and above 8 for all the movie
+		System.out.println(MovieService.getMovieAndRatingByRating(8));
+
+		// It prints the movie with average rating greater than and equal to 6
+		System.out.println(MovieService.findMovieByAverageRating(6));
+
 	}
 
 }

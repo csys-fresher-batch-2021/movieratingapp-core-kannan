@@ -272,4 +272,28 @@ public class UserRatingDAO {
 		return count;
 	}
 
+	public static Integer counbtRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException {
+		Integer count = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select count(rating) from rating_by_user where rating =? and movie_id=?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, rating);
+			pst.setInt(2, movieId);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt("count");
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException("Unable to count the data");
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return count;
+	}
 }

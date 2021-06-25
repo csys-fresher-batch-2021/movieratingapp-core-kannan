@@ -1,6 +1,10 @@
 package in.kannan.util;
 
 public class MessageDisplay {
+	private MessageDisplay() {
+
+	}
+
 	public static final String INVALIDEMAIL = "Invalid email format";
 	public static final String INVALIDPASSWORD = "Invalid password format";
 	public static final String INVALIDROLE = "Invalid role";

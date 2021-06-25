@@ -9,6 +9,7 @@ import in.kannan.exception.DBException;
 import in.kannan.model.User;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
+import in.kannan.util.MessageDisplay;
 
 public class UserDAO {
 	private UserDAO() {
@@ -51,7 +52,7 @@ public class UserDAO {
 
 		catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch the details");
+			throw new DBException(MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -93,7 +94,7 @@ public class UserDAO {
 
 		catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(e, "Unable to fetch the details");
+			throw new DBException(MessageDisplay.FINDROLEERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -130,7 +131,7 @@ public class UserDAO {
 			pst.execute();
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Unable to save the data");
+			throw new DBException(MessageDisplay.SAVEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}

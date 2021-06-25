@@ -14,6 +14,7 @@ import in.kannan.model.MovieRating;
 import in.kannan.model.UserRating;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
+import in.kannan.util.MessageDisplay;
 
 public class UserRatingDAO {
 	private UserRatingDAO() {
@@ -47,7 +48,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException("Failed to save the data");
+			throw new DBException(MessageDisplay.SAVERATINGERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -79,7 +80,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException("Failed to save the data");
+			throw new DBException(MessageDisplay.SAVEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -100,7 +101,7 @@ public class UserRatingDAO {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Data's not found");
+			throw new DBException(MessageDisplay.DATAERROR);
 		}
 
 	}
@@ -121,7 +122,7 @@ public class UserRatingDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,avg(rating) as average_rating from user_ratings group by movie_id";
+			String sql = "select movie_id,avg(rating) as average_rating from user_ratings where active = true  group by movie_id";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -135,7 +136,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, "Failed to fetch the data");
+			throw new DBException(MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -176,7 +177,7 @@ public class UserRatingDAO {
 		} catch (ConnectionException | SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException("Unable to fetch the details");
+			throw new DBException(MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -204,7 +205,7 @@ public class UserRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to delete the id ");
+			throw new DBException(MessageDisplay.DELETEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -233,7 +234,7 @@ public class UserRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to delete the data ");
+			throw new DBException(MessageDisplay.DELETEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -256,7 +257,7 @@ public class UserRatingDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select count(movie_id) as users_rated from user_ratings where movie_id = ?";
+			String sql = "select count(movie_id) as users_rated from user_ratings where movie_id = ? and active = true";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();
@@ -266,7 +267,7 @@ public class UserRatingDAO {
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Unable to count the data");
+			throw new DBException(MessageDisplay.COUNTERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -301,7 +302,7 @@ public class UserRatingDAO {
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Unable to count the data");
+			throw new DBException(MessageDisplay.COUNTERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -326,7 +327,7 @@ public class UserRatingDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select rating ,count(rating) from user_ratings where movie_id=? group by rating order by rating desc ";
+			String sql = "select rating ,count(rating) from user_ratings where movie_id=? and active = true group by rating order by rating desc ";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();
@@ -338,7 +339,7 @@ public class UserRatingDAO {
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Sorry Unable to count the data");
+			throw new DBException(MessageDisplay.COUNTERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}

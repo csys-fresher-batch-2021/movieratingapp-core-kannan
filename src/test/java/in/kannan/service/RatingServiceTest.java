@@ -14,7 +14,7 @@ public class RatingServiceTest {
 		// RatingService.addUsersRating(8, 4, 5);
 
 		// This method counts number of user rated for the particular movie
-		System.out.println(RatingService.countUsersRated("Bhoomi"));
+		// System.out.println(RatingService.countUsersRated("Bhoomi"));
 
 		// This method undo the rating of userId =2 to movieId =1
 		// RatingService.undoRating(2, 1);// for user Id =2 , movie Id =1
@@ -25,7 +25,7 @@ public class RatingServiceTest {
 
 		// This method returns the list of rating along with the number of user rated
 		// for the particular rating for the given movie.
-		// System.out.println(RatingService.getRatingCountByMovieName("Bhoomi "));
+		System.out.println(RatingService.getRatingCountByMovieName("Bhoomi "));
 
 	}
 

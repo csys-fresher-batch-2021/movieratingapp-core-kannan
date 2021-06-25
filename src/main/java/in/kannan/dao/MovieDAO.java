@@ -17,6 +17,7 @@ import in.kannan.model.Movie;
 import in.kannan.model.MovieRating;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
+import in.kannan.util.MessageDisplay;
 
 public class MovieDAO {
 	/**
@@ -27,7 +28,6 @@ public class MovieDAO {
 	private static final String RELEASE_DATE = "release_date";
 	private static final String STATUS = "status";
 	private static final String AVERAGE_RATING = "average_rating";
-	private static final String MESSAGE = "Unable to fetch movie details ";
 
 	private MovieDAO() {
 
@@ -48,7 +48,7 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,movie_name,release_date,status from movies";
+			String sql = "select movie_id,movie_name,release_date,status from movies order by release_date desc";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -65,7 +65,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MESSAGE);
+			throw new DBException(e, MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -100,7 +100,7 @@ public class MovieDAO {
 			}
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new ValidationException("Unable to fetch the data");
+			throw new ValidationException(MessageDisplay.FINDMOVIEERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, null);
 		}
@@ -136,7 +136,7 @@ public class MovieDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to save the data  ");
+			throw new DBException(MessageDisplay.SAVEERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -168,7 +168,7 @@ public class MovieDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to fetch movie id for the given movie  ");
+			throw new DBException(MessageDisplay.FINDMOVIEIDERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -196,7 +196,7 @@ public class MovieDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Failed to delete the movie ");
+			throw new DBException(MessageDisplay.DELETEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -220,7 +220,7 @@ public class MovieDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String sql = "select * from movie_ratings_order";
+			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_sort_view";
 
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
@@ -240,7 +240,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MESSAGE);
+			throw new DBException(e, MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -268,7 +268,7 @@ public class MovieDAO {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select m.movie_id,m.movie_name,m.release_date,m.status,a.average_rating");
 			sql.append(" from movies m inner join(select movie_id,round(avg(rating) ,2) as average_rating ");
-			sql.append(" from user_ratings where movie_id =? group by movie_id ) as a on");
+			sql.append(" from user_ratings where movie_id =? and active = true group by movie_id ) as a on");
 			sql.append(" m.movie_id=a.movie_id");
 			String sq = sql.toString();
 			pst = connection.prepareStatement(sq);
@@ -289,7 +289,7 @@ public class MovieDAO {
 		} catch (SQLException | NullPointerException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MESSAGE);
+			throw new DBException(e, MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -305,7 +305,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<MovieRating> findAllAndAverageRating() throws DBException {
+	public static List<MovieRating> findAllMovieRating() throws DBException {
 		List<MovieRating> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -314,7 +314,7 @@ public class MovieDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String sql = "select * from movie_ratings";
+			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_view";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -333,7 +333,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MESSAGE);
+			throw new DBException(e, MessageDisplay.FINDERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -351,7 +351,7 @@ public class MovieDAO {
 	 * @throws DBException
 	 */
 
-	public static List<MovieRatingCountDTO> findMovieAndRatingByRating(Integer rating) throws DBException {
+	public static List<MovieRatingCountDTO> findMovieRatingByRating(Integer rating) throws DBException {
 		List<MovieRatingCountDTO> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -361,7 +361,7 @@ public class MovieDAO {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select m.movie_id,m.movie_name,m.release_date,m.status,r.count from movies m inner join");
 			sql.append(
-					" (select movie_id,count(rating) from user_ratings where rating>=? group by movie_id order by movie_id )");
+					" (select movie_id,count(rating) from user_ratings where rating>=? and active = true group by movie_id order by movie_id )");
 			sql.append(" r on m.movie_id=r.movie_id;");
 			String sq = sql.toString();
 			pst = connection.prepareStatement(sq);
@@ -382,7 +382,7 @@ public class MovieDAO {
 
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Unable to count the rating");
+			throw new DBException(MessageDisplay.COUNTERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -409,7 +409,8 @@ public class MovieDAO {
 			StringBuilder sql = new StringBuilder();
 			sql.append(
 					"select m.movie_id,m.movie_name,m.release_date,m.status,a.average_rating from movies m inner join");
-			sql.append("(select movie_id,round(avg(rating),2) as average_rating from user_ratings group by movie_id");
+			sql.append(
+					"(select movie_id,round(avg(rating),2) as average_rating from user_ratings where active = true group by movie_id");
 			sql.append(" having round(avg(rating),2) >=? order by movie_id) as a on  m.movie_id=a.movie_id");
 			String sq = sql.toString();
 			pst = connection.prepareStatement(sq);
@@ -429,7 +430,7 @@ public class MovieDAO {
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException("Unable to Sort");
+			throw new DBException(MessageDisplay.SORTERROR);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}

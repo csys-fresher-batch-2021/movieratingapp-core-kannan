@@ -1,0 +1,1 @@
+alter table user_ratings add column active boolean not null default true;

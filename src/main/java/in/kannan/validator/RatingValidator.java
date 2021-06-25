@@ -1,13 +1,12 @@
 package in.kannan.validator;
 
 import in.kannan.exception.ValidationException;
+import in.kannan.util.MessageDisplay;
 
 public class RatingValidator {
 	private RatingValidator() {
 		// private constructor to hide the existing class
 	}
-
-	private static final String MESSAGE = "Rating should be between 1 and 5";
 
 	/**
 	 * Validates the user Id,it should be greater than 0.
@@ -86,11 +85,11 @@ public class RatingValidator {
 
 	public static void validateRating(Integer userId, Integer movieId, Integer rating) throws ValidationException {
 		if (!isValidId(userId)) {
-			throw new ValidationException("Invalid user Id");
+			throw new ValidationException(MessageDisplay.INVALIDUSERID);
 		} else if (!isValidId(movieId)) {
-			throw new ValidationException("Invalid movie Id");
+			throw new ValidationException(MessageDisplay.INVALIDMOVIEID);
 		} else if (!isValidRating(rating)) {
-			throw new ValidationException(MESSAGE);
+			throw new ValidationException(MessageDisplay.INVALIDRATING);
 		}
 	}
 
@@ -105,9 +104,9 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating, String movieName) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException(MESSAGE);
+			throw new ValidationException(MessageDisplay.INVALIDRATING);
 		} else if (!isValidMovieName(movieName)) {
-			throw new ValidationException("Invalid Movie Name");
+			throw new ValidationException(MessageDisplay.INVALIDMOVIENAME);
 		}
 	}
 
@@ -122,7 +121,7 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException(MESSAGE);
+			throw new ValidationException(MessageDisplay.INVALIDRATING);
 		}
 	}
 

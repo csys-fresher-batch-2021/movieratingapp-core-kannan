@@ -1,5 +1,5 @@
 # core Features:
-1-Display all movies with average rating order by average rating desc.
+# 1-Display all movies with average rating order by average rating desc.
 
 System.out.println(MovieService.getMoviesWithRating());
 
@@ -21,7 +21,7 @@ MovieRating [movie=Movie [id=6, name=Sangathalaivan, releaseDate=2021-02-26, sta
 MovieRating [movie=Movie [id=7, name=Chakra, releaseDate=2021-02-19, status=true], rating=0.0]]
  
 
-2-Rating by user
+# 2-Rating by user
 
 RatingService.addUserRating(2, 1, 5);
 
@@ -32,13 +32,13 @@ movieId=1,
 rating =5;
 
 
-3-Display Total number of user rated for the particular movie:
+# 3-Display Total number of user rated for the particular movie:
 
 System.out.println(RatingService.countUsersRated("Master"));
 
 output:5
 
-4-for particular movie :
+# 4-for particular movie Rating List as number of user rated 5 ,4 etc:
 
 System.out.println(RatingService.getRatingCountByMovieName("Bhoomi"));
 
@@ -48,7 +48,7 @@ Output:
 [UserCount [rating=5.0, count=3],   UserCount [rating=4.0, count=1],   UserCount [rating=3.0, count=1]]
 
 
-5- This feature is to add rating by user here movie list with average rating is displayed without order
+# 5- This feature is to add rating by user here movie list with average rating is displayed without order
 
 System.out.println(MovieService.getAllMovieWithRating());
 
@@ -65,19 +65,19 @@ MovieRating [movie=Movie [id=5, name=Kutty Story, releaseDate=2021-02-12, status
 MovieRating [movie=Movie [id=6, name=Sangathalaivan, releaseDate=2021-02-26, status=true], rating=0.0]]
 
 
-6-When the user unknowingly rated and he wants to remove his rating
+# 6-When the user unknowingly rated and he wants to remove his rating
 
 
 RatingService.undoRating(2, 1);  userId = 2 ,movieId = 1;
 
 
-7- Number of user rated a particular rating for a particular movie
+# 7- Number of user rated a particular rating for a particular movie
 
 System.out.println(RatingService.countRatingByRatingAndMovieName(5, "Master"));
 
 output: 1
 
-8-Display Movie Details:
+# 8-Display Movie Details:
 
 displayMovieDetail();
 
@@ -96,7 +96,7 @@ Movie [id=5, name=Parris Jeyaraj, releaseDate=2021-02-12, status=true]
 
 
 
-9-This prints the total number of users rated for each movie for the given rating.
+# 9-This prints the total number of users rated for each movie for the given rating.
 
 System.out.println(MovieService.getMovieRatingByRating(3));
 
@@ -108,7 +108,7 @@ CountRating [movie=Movie [id=3, name=Pulikkuthi Pandi, releaseDate=2021-01-15, s
 
 CountRating [movie=Movie [id=4, name=Kutty Story, releaseDate=2021-02-12, status=true], count=1]
 
-10-This print the list of movies having average rating equal and greater than 3.
+# 10-This print the list of movies having average rating equal and greater than 3.
 
 System.out.println(MovieService.getMovieByAverageRating(3));
 
@@ -121,27 +121,27 @@ MovieRating [movie=Movie [id=3, name=Pulikkuthi Pandi, releaseDate=2021-01-15, s
 MovieRating [movie=Movie [id=4, name=Kutty Story, releaseDate=2021-02-12, status=true], rating=3.5]]
 
 
-11-Add movie by Admin
+# 11-Add movie by Admin
 
 MovieService.addMovie("Dola", "2021-02-12",true);
 
-12-Remove movie by Admin
+# 12-Remove movie by Admin
 
 MovieService.removeMovie("Bhoomi");
 
-13- UserRegistration
+# 13- UserRegistration
 
 UserService.userRegistration("Ashwin", "ashwin1234@gmail.com", "as12AS@#Dwe", "ADMIN");
 
-14-UserLogin
+# 14-UserLogin
 
 UserService.userLogin("naraya@live.com", "jefien344@##AAS");
 
-15-AdminLogin
+# 15-AdminLogin
 
 UserService.adminLogin("kannanraemes@hgmail.com", "fre3232SFE2#");
 
-16-Find movie detail with average rating for movie
+# 16-Find movie detail with average rating for movie
 
 System.out.println(MovieService.getMovieWithRatingByMovieName("Master"));
 

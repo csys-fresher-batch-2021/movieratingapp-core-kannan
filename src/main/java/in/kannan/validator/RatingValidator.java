@@ -7,6 +7,8 @@ public class RatingValidator {
 		// private constructor to hide the existing class
 	}
 
+	private static final String MESSAGE = "Rating should be between 1 and 5";
+
 	/**
 	 * Validates the user Id,it should be greater than 0.
 	 * 
@@ -32,7 +34,7 @@ public class RatingValidator {
 
 	public static boolean isValidRating(Integer rating) {
 		boolean isValid = false;
-		if (rating > 0 && rating <= 10) {
+		if (rating > 0 && rating <= 5) {
 			isValid = true;
 		}
 		return isValid;
@@ -88,7 +90,7 @@ public class RatingValidator {
 		} else if (!isValidId(movieId)) {
 			throw new ValidationException("Invalid movie Id");
 		} else if (!isValidRating(rating)) {
-			throw new ValidationException("Rating should be between 1 and 10");
+			throw new ValidationException(MESSAGE);
 		}
 	}
 
@@ -103,7 +105,7 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating, String movieName) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException("Rating should be between 1 and 10");
+			throw new ValidationException(MESSAGE);
 		} else if (!isValidMovieName(movieName)) {
 			throw new ValidationException("Invalid Movie Name");
 		}
@@ -120,7 +122,7 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException("Rating should be between 1 and 10");
+			throw new ValidationException(MESSAGE);
 		}
 	}
 

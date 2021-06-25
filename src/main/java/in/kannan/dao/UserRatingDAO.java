@@ -21,7 +21,7 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * This method saves the data into the database.
+	 * This method saves the user rating.
 	 * 
 	 * @param userId
 	 * @param movieId
@@ -35,7 +35,7 @@ public class UserRatingDAO {
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "insert into rating_by_user(user_id,movie_id,rating) values (?,?,?)";
+			String sql = "insert into user_ratings(user_id,movie_id,rating) values (?,?,?)";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
 			pst.setInt(2, movieId);
@@ -55,7 +55,7 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * This method saves the data into the database.
+	 * This method saves the movie_id .
 	 * 
 	 * @param userId
 	 * @param movieId
@@ -63,13 +63,13 @@ public class UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public static void addMovieId(Integer movieId) throws DBException {
+	public static void saveMovieId(Integer movieId) throws DBException {
 
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "insert into rating_by_user(movie_id) values (?)";
+			String sql = "insert into user_ratings(movie_id) values (?)";
 			pst = connection.prepareStatement(sql);
 
 			pst.setInt(1, movieId);
@@ -121,7 +121,7 @@ public class UserRatingDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,avg(rating) as average_rating from rating_by_user group by movie_id";
+			String sql = "select movie_id,avg(rating) as average_rating from user_ratings group by movie_id";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -154,7 +154,7 @@ public class UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public static UserRating exist(Integer userId, Integer movieId) throws DBException {
+	public static UserRating findUserIdByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException {
 		UserRating userRating = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -162,7 +162,7 @@ public class UserRatingDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select user_id from rating_by_user where user_id = ? and movie_id =?";
+			String sql = "select user_id from user_ratings where user_id = ? and movie_id =?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
 			pst.setInt(2, movieId);
@@ -197,7 +197,7 @@ public class UserRatingDAO {
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "delete from rating_by_user where movie_id =?";
+			String sql = "delete from user_ratings where movie_id =?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			pst.executeUpdate();
@@ -213,19 +213,19 @@ public class UserRatingDAO {
 	}
 
 	/**
-	 * This method removes a particular data under the given movie id and user id
+	 * This method removes a particular data for the given movie id.
 	 * 
 	 * @param userId
 	 * @param movieId
 	 * @throws DBException
 	 */
 
-	public static void remove(Integer userId, Integer movieId) throws DBException {
+	public static void removeByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "delete from rating_by_user where user_id=? and movie_id =?";
+			String sql = "delete from user_ratings where user_id=? and movie_id =?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
 			pst.setInt(2, movieId);
@@ -249,14 +249,14 @@ public class UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public static Integer countByMovieId(Integer movieId) throws DBException {
+	public static Integer countRatingByMovieId(Integer movieId) throws DBException {
 		Integer count = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select count(movie_id) as users_rated from rating_by_user where movie_id = ? and user_id is not null";
+			String sql = "select count(movie_id) as users_rated from user_ratings where movie_id = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();
@@ -290,7 +290,7 @@ public class UserRatingDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select count(rating) from rating_by_user where rating =? and movie_id=?";
+			String sql = "select count(rating) from user_ratings where rating =? and movie_id=?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, rating);
 			pst.setInt(2, movieId);
@@ -310,7 +310,7 @@ public class UserRatingDAO {
 
 	/**
 	 * This method counts the number of user rated for particular rating for the
-	 * particular movie.Input is the movie name for which each rating and number fo
+	 * particular movie.Input is the movie name for which each rating and number of
 	 * user rated is calculated.
 	 * 
 	 * @param movieId
@@ -326,7 +326,7 @@ public class UserRatingDAO {
 		ResultSet rs = null;
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select rating,count(user_id) from rating_by_user where movie_id =? and user_id is not null group by rating order by rating desc ";
+			String sql = "select rating ,count(rating) from user_ratings where movie_id=? group by rating order by rating desc ";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();

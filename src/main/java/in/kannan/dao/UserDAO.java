@@ -32,7 +32,7 @@ public class UserDAO {
 		User user = null;
 		connection = ConnectionUtil.getConnection();
 		try {
-			String sql = "select id,name,email,role from users where email = ? and password = ?";
+			String sql = "select user_id,name,email,role from users where email = ? and password = ?";
 
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, email);
@@ -41,7 +41,7 @@ public class UserDAO {
 
 			if (rs.next()) {
 
-				Integer id = rs.getInt("id");
+				Integer id = rs.getInt("user_id");
 				String name = rs.getString("name");
 				String role = rs.getString("role");
 				String userEmail = rs.getString("email");
@@ -76,7 +76,7 @@ public class UserDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select role from users where id = ?";
+			String sql = "select role from users where user_id = ?";
 
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
@@ -103,7 +103,7 @@ public class UserDAO {
 	}
 
 	/**
-	 * This method saves the data .
+	 * This method saves the particular user data .
 	 * 
 	 * @param userName
 	 * @param email

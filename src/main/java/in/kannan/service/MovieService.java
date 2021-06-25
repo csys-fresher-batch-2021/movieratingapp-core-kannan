@@ -31,7 +31,7 @@ public class MovieService {
 	 */
 	public static List<Movie> getAllMovies() throws ServiceException {
 		try {
-			return MovieDAO.findAllOrderByMovieId();
+			return MovieDAO.findAll();
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -67,9 +67,6 @@ public class MovieService {
 			movieDetail.setStatus(status);
 
 			MovieDAO.save(movieDetail);
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
-			UserRatingDAO.addMovieId(movieId);
-
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to add movie ");
@@ -112,7 +109,7 @@ public class MovieService {
 	public static List<MovieRating> getMoviesWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findByMovieIdOrderByAverageRatingDesc();
+			return MovieDAO.findAllOrderByAverageRatingDesc();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to fetch the detail");
@@ -130,7 +127,7 @@ public class MovieService {
 	public static List<MovieRating> getAllMovieWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findByMovieId();
+			return MovieDAO.findAllAndAverageRating();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException("Sorry unable to fetch the detail");
@@ -157,7 +154,7 @@ public class MovieService {
 				throw new ServiceException("Movie is Not Registered ");
 			}
 
-			return MovieDAO.findByMovieId(movieId);
+			return MovieDAO.findAllByMovieId(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -173,9 +170,12 @@ public class MovieService {
 	 * @param rating
 	 * @return
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
 
-	public static List<MovieRatingCountDTO> getMovieAndRatingByRating(Integer rating) throws ServiceException {
+	public static List<MovieRatingCountDTO> getMovieAndRatingByRating(Integer rating)
+			throws ServiceException, ValidationException {
+		RatingValidator.validateRating(rating);
 		try {
 			return MovieDAO.findMovieAndRatingByRating(rating);
 		} catch (DBException e) {

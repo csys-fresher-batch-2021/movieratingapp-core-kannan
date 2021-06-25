@@ -23,19 +23,19 @@ public class RatingService {
 	/**
 	 * This method is used to add the users rating.It validates the input details,
 	 * check whether the user the rated for the particular movie before ,finds the
-	 * role of the user then add their rating and also update the rating in another
-	 * field.
+	 * role of the user then add their rating.
 	 * 
 	 * @param userId
 	 * @param movieId
 	 * @param rating
 	 * @throws ServiceException
+	 * @throws ValidationException 
 	 */
 
-	public static void addUserRating(Integer userId, Integer movieId, Integer rating) throws ServiceException {
+	public static void addUserRating(Integer userId, Integer movieId, Integer rating) throws ServiceException, ValidationException {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
-			UserRating userRating = UserRatingDAO.exist(userId, movieId);
+			UserRating userRating = UserRatingDAO.findUserIdByUserIdAndMovieId(userId, movieId);
 			if (userRating != null) {
 				throw new ServiceException("You already Rated");
 			}
@@ -46,9 +46,9 @@ public class RatingService {
 
 			UserRatingDAO.save(userId, movieId, rating);
 
-		} catch (ValidationException | DBException e) {
+		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Rating Should be between 0 and 10");
+			throw new ServiceException(e.getMessage());
 
 		}
 
@@ -63,10 +63,10 @@ public class RatingService {
 	 */
 	public static void undoRating(Integer userID, Integer movieId) throws ServiceException {
 		try {
-			UserRatingDAO.remove(userID, movieId);
+			UserRatingDAO.removeByUserIdAndMovieId(userID, movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Unable to Update");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -90,10 +90,10 @@ public class RatingService {
 			if (movieId == null) {
 				throw new ServiceException("Movie Not found");
 			}
-			count = UserRatingDAO.countByMovieId(movieId);
+			count = UserRatingDAO.countRatingByMovieId(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to count the user ratings for this movie");
+			throw new ServiceException(e.getMessage());
 		}
 		return count;
 	}
@@ -123,14 +123,14 @@ public class RatingService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to count the particular rating for particular movie ");
+			throw new ServiceException(e.getMessage());
 		}
 		return count;
 
 	}
 
 	/**
-	 * This method prints the list as number of user rated for the particular movie
+	 * This method returns the list as number of user rated for the particular movie
 	 * for particular rating.
 	 * 
 	 * @param movieName
@@ -152,7 +152,7 @@ public class RatingService {
 			return UserRatingDAO.countRatingByMovieIdOrderByRatingDesc(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry Unable to count the data");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}

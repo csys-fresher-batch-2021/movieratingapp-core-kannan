@@ -31,11 +31,11 @@ public class MovieService {
 	 */
 	public static List<Movie> getAllMovies() throws ServiceException {
 		try {
-			return MovieDAO.findAllOrderByMovieId();
+			return MovieDAO.findAll();
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e, "Sorry unable to fetch the movie details");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -67,12 +67,9 @@ public class MovieService {
 			movieDetail.setStatus(status);
 
 			MovieDAO.save(movieDetail);
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
-			UserRatingDAO.addMovieId(movieId);
-
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to add movie ");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -82,8 +79,9 @@ public class MovieService {
 	 * 
 	 * @param movieName
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
-	public static void removeMovie(String movieName) throws ServiceException {
+	public static void removeMovie(String movieName) throws ServiceException, ValidationException {
 		try {
 			String newMovieName = movieName.trim();
 			MovieValidator.validateMovieName(newMovieName);
@@ -96,9 +94,9 @@ public class MovieService {
 			UserRatingDAO.remove(movieId);
 			MovieDAO.remove(movieId);
 
-		} catch (ValidationException | DBException e) {
+		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to delete the movie");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -112,10 +110,10 @@ public class MovieService {
 	public static List<MovieRating> getMoviesWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findByMovieIdOrderByAverageRatingDesc();
+			return MovieDAO.findAllOrderByAverageRatingDesc();
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to fetch the detail");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -130,10 +128,10 @@ public class MovieService {
 	public static List<MovieRating> getAllMovieWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findByMovieId();
+			return MovieDAO.findAllMovieRating();
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to fetch the detail");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -157,11 +155,11 @@ public class MovieService {
 				throw new ServiceException("Movie is Not Registered ");
 			}
 
-			return MovieDAO.findByMovieId(movieId);
+			return MovieDAO.findAllByMovieId(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry unable to find Movie Details");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -173,13 +171,16 @@ public class MovieService {
 	 * @param rating
 	 * @return
 	 * @throws ServiceException
+	 * @throws ValidationException
 	 */
 
-	public static List<MovieRatingCountDTO> getMovieAndRatingByRating(Integer rating) throws ServiceException {
+	public static List<MovieRatingCountDTO> getMovieRatingByRating(Integer rating)
+			throws ServiceException, ValidationException {
+		RatingValidator.validateRating(rating);
 		try {
-			return MovieDAO.findMovieAndRatingByRating(rating);
+			return MovieDAO.findMovieRatingByRating(rating);
 		} catch (DBException e) {
-			throw new ServiceException("Sorry unable to count the user's rating");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -199,7 +200,7 @@ public class MovieService {
 			RatingValidator.validateRating(averageRating);
 			return MovieDAO.findMovieByAverageRating(averageRating);
 		} catch (DBException e) {
-			throw new ServiceException("Unable to Sort the movie");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}

@@ -1,6 +1,7 @@
 package in.kannan.validator;
 
 import in.kannan.exception.ValidationException;
+import in.kannan.util.MessageDisplay;
 
 public class MovieValidator {
 	private MovieValidator() {
@@ -71,10 +72,10 @@ public class MovieValidator {
 	public static void validateMovie(String movieName, String date) throws ValidationException {
 
 		if (!isValidMovieName(movieName)) {
-			throw new ValidationException("Invalid Movie Name ");
+			throw new ValidationException(MessageDisplay.INVALIDMOVIENAME);
 		}
 		if (!isValidDate(date)) {
-			throw new ValidationException("Please fill the date");
+			throw new ValidationException(MessageDisplay.INVALIDDATE);
 		}
 	}
 
@@ -89,7 +90,7 @@ public class MovieValidator {
 	public static void validateMovieName(String name) throws ValidationException {
 
 		if (!isValidMovieName(name)) {
-			throw new ValidationException("Invalid Movie Name ");
+			throw new ValidationException(MessageDisplay.INVALIDMOVIENAME);
 		}
 
 	}

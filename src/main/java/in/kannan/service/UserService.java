@@ -37,7 +37,7 @@ public class UserService {
 		} catch (DBException e) {
 			Logger.trace(e);
 
-			throw new ServiceException(e, "Unable to fetch the user details");
+			throw new ServiceException(e.getMessage());
 		}
 
 		return user;
@@ -67,7 +67,7 @@ public class UserService {
 		} catch (DBException e) {
 			Logger.trace(e);
 
-			throw new ServiceException(e, "Unable to fetch the user details");
+			throw new ServiceException(e.getMessage());
 		}
 
 		return user;
@@ -87,7 +87,7 @@ public class UserService {
 			UserDAO.save(user);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException("Sorry Unable to register");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}

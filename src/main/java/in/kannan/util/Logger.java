@@ -17,22 +17,20 @@ public class Logger {
 	/**
 	 * trace the exception message
 	 * 
-	 * @param message
-	 * @param e       type of exception occurred
-	 */
-
-	public static void trace(String message, Exception e) {
-		e.printStackTrace();
-	}
-
-	/**
-	 * trace the exception message
-	 * 
 	 * @param e type of exception occurred
 	 */
 
 	public static void trace(Exception e) {
 		e.printStackTrace();
+	}
+
+	/**
+	 * THis logger method used to print the given message
+	 * 
+	 * @param message
+	 */
+	public static void message(String message) {
+		System.out.println(message);
 	}
 
 }

@@ -137,4 +137,32 @@ public class UserDAO {
 		}
 
 	}
+
+	/**
+	 * This method updates the blocked column of a given user id to false
+	 * 
+	 * @param userId
+	 * @throws DBException
+	 */
+
+	public static void updateBlockedByUserId(Integer userId) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "update users set blocked = true where user_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, userId);
+			int r = pst.executeUpdate();
+			if (r == 1) {
+				Logger.message(MessageDisplay.UPDATEMESSAGE);
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(MessageDisplay.UPDATEERROR);
+		} finally {
+			ConnectionUtil.close(pst, connection);
+		}
+
+	}
 }

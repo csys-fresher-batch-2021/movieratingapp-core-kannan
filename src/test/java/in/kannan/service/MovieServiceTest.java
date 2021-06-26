@@ -75,13 +75,13 @@ public class MovieServiceTest {
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)
-		// System.out.println(MovieService.getMoviesWithRating());
+		System.out.println(MovieService.getMoviesWithRating());
 
 		// counts number of user rated 8 and above 8 for all the movie
 		// System.out.println(MovieService.getMovieRatingByRating(3));
 
 		// It prints the movie with average rating greater than and equal to 6
-		System.out.println(MovieService.getMovieByAverageRating(3));
+		// System.out.println(MovieService.getMovieByAverageRating(3));
 
 	}
 

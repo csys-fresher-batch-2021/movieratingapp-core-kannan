@@ -1,11 +1,13 @@
 package in.kannan.service;
 
 import in.kannan.dao.UserDAO;
+import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
+import in.kannan.validator.RatingValidator;
 import in.kannan.validator.UserValidator;
 
 public class UserService {
@@ -73,6 +75,17 @@ public class UserService {
 		return user;
 	}
 
+	/**
+	 * This method registers the particular user in the data
+	 * 
+	 * @param userName
+	 * @param email
+	 * @param password
+	 * @param role
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
+
 	public static void userRegistration(String userName, String email, String password, String role)
 			throws ValidationException, ServiceException {
 		User user = null;
@@ -90,6 +103,24 @@ public class UserService {
 			throw new ServiceException(e.getMessage());
 		}
 
+	}
+
+	/**
+	 * This method is used to block the fake user.
+	 * 
+	 * @param userId
+	 * @throws ValidationException
+	 * @throws ServiceException
+	 */
+	public static void blockUser(Integer userId) throws ValidationException, ServiceException {
+		RatingValidator.validateId(userId);
+		try {
+			UserDAO.updateBlockedByUserId(userId);
+			UserRatingDAO.updateActiveByUserId(userId);
+		} catch (DBException e) {
+			Logger.trace(e);
+			throw new ServiceException(e.getMessage());
+		}
 	}
 
 }

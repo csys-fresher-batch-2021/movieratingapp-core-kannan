@@ -9,6 +9,7 @@ import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
+import in.kannan.util.MessageDisplay;
 import in.kannan.validator.RatingValidator;
 import in.kannan.validator.UserValidator;
 
@@ -61,6 +62,10 @@ public class UserService {
 		try {
 
 			user = UserDAO.findByEmailAndPassword(email, password);
+			User fakeUser = UserDAO.findByEmail(email);
+			if (fakeUser != null) {
+				throw new ServiceException(MessageDisplay.BLOCKMESSAGE);
+			}
 
 			if (user == null) {
 				throw new ServiceException("Invalid Login credentials");

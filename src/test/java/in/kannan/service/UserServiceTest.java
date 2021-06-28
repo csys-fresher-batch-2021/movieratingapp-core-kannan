@@ -17,8 +17,7 @@ public class UserServiceTest {
 		// "jefien344@##AAS"));
 
 		// This method checks the user Login
-		// System.out.println(UserService.userLogin("naraya@live.com",
-		// "jefien344@##AAS"));
+		System.out.println(UserService.userLogin("siva999@gmail.com", "12^%vfdsAD"));
 
 		// This method registers the particular user.
 		// UserService.userRegistration("Ashwin", "ashwin1234@gmail.com", "as12AS@#Dwe",
@@ -27,7 +26,7 @@ public class UserServiceTest {
 		// UserService.userRegistration("Vinoth", "vino123@gmail.com", "ASaf12@#jK!2",
 		// "ADMIN");
 
-		UserService.blockUser(5);
+		// UserService.blockUser(5);
 
 	}
 

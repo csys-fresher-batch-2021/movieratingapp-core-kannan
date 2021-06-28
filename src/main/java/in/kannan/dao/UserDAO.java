@@ -170,4 +170,38 @@ public class UserDAO {
 		}
 
 	}
+
+	/**
+	 * This method checks the given id with blocked column to get the data to login
+	 * 
+	 * @param email
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static User findByEmail(String email) throws DBException {
+		User user = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select email,password from users where email =? and blocked = true ";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, email);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				String mailId = rs.getString("email");
+				String password = rs.getString("password");
+				user = new User(mailId, password);
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(MessageDisplay.FINDERROR);
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return user;
+	}
 }

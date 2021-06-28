@@ -26,5 +26,6 @@ public class MessageDisplay {
 	public static final String DATAERROR = "Data is not found";
 	public static final String UPDATEERROR = "Sorry unable to update the data";
 	public static final String UPDATEMESSAGE = "Successfully updated ";
+	public static final String BLOCKMESSAGE = "You are blocked to login";
 
 }

@@ -1,5 +1,7 @@
 package in.kannan.service;
 
+import java.time.LocalDateTime;
+
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
@@ -115,7 +117,8 @@ public class UserService {
 	public static void blockUser(Integer userId) throws ValidationException, ServiceException {
 		RatingValidator.validateId(userId);
 		try {
-			UserDAO.updateBlockedByUserId(userId);
+			LocalDateTime blockedDateTime = LocalDateTime.now();
+			UserDAO.updateBlockedByUserId(userId, blockedDateTime);
 			UserRatingDAO.updateActiveByUserId(userId);
 		} catch (DBException e) {
 			Logger.trace(e);

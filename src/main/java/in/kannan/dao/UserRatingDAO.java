@@ -361,9 +361,9 @@ public class UserRatingDAO {
 			String sql = "update user_ratings set active = false where user_id = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setInt(1, userId);
-			int r = pst.executeUpdate();
+			int rows = pst.executeUpdate();
 
-			Logger.message(MessageDisplay.UPDATEMESSAGE + r + " rows");
+			Logger.message(MessageDisplay.UPDATEMESSAGE + rows + " rows");
 
 		} catch (SQLException e) {
 			Logger.trace(e);

@@ -125,4 +125,16 @@ public class RatingValidator {
 		}
 	}
 
+	/**
+	 * This method validates the userId
+	 * 
+	 * @param id
+	 * @throws ValidationException
+	 */
+	public static void validateId(Integer id) throws ValidationException {
+		if (!isValidId(id)) {
+			throw new ValidationException(MessageDisplay.INVALIDUSERID);
+		}
+	}
+
 }

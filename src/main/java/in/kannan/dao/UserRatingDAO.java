@@ -345,4 +345,32 @@ public class UserRatingDAO {
 		}
 		return counting;
 	}
+
+	/**
+	 * This method updates the active column of user rating to false .
+	 * 
+	 * @param userId
+	 * @throws DBException
+	 */
+
+	public static void updateActiveByUserId(Integer userId) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "update user_ratings set active = false where user_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setInt(1, userId);
+			int rows = pst.executeUpdate();
+
+			Logger.message(MessageDisplay.UPDATEMESSAGE + rows + " rows");
+
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(MessageDisplay.UPDATEERROR);
+		} finally {
+			ConnectionUtil.close(pst, connection);
+		}
+
+	}
 }

@@ -24,5 +24,7 @@ public class MessageDisplay {
 	public static final String COUNTERROR = "Sorry unable to count the data";
 	public static final String SORTERROR = "Sorry unable to sort the data";
 	public static final String DATAERROR = "Data is not found";
+	public static final String UPDATEERROR = "Sorry unable to update the data";
+	public static final String UPDATEMESSAGE = "Successfully updated ";
 
 }

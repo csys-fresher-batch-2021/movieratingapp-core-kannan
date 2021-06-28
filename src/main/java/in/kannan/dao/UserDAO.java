@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import in.kannan.exception.DBException;
 import in.kannan.model.User;
@@ -132,6 +134,37 @@ public class UserDAO {
 		} catch (SQLException e) {
 			Logger.trace(e);
 			throw new DBException(MessageDisplay.SAVEERROR);
+		} finally {
+			ConnectionUtil.close(pst, connection);
+		}
+
+	}
+
+	/**
+	 * This method updates the blocked column of a given user id to false
+	 * 
+	 * @param userId
+	 * @throws DBException
+	 */
+
+	public static void updateBlockedByUserId(Integer userId, LocalDateTime modifiedDateTime) throws DBException {
+		Connection connection = null;
+		PreparedStatement pst = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "update users set blocked = true, blocked_date_time =? where user_id = ?";
+			pst = connection.prepareStatement(sql);
+
+			Timestamp dateTime = Timestamp.valueOf(modifiedDateTime);
+			pst.setTimestamp(1, dateTime);
+			pst.setInt(2, userId);
+			int rows = pst.executeUpdate();
+			if (rows == 1) {
+				Logger.message(MessageDisplay.UPDATEMESSAGE);
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(MessageDisplay.UPDATEERROR);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}

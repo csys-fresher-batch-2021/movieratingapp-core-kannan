@@ -147,7 +147,7 @@ public class UserDAO {
 	 * @throws DBException
 	 */
 
-	public static void updateBlockedByUserId(Integer userId, LocalDateTime modifiedDateTime) throws DBException {
+	public static void update(Integer userId, LocalDateTime modifiedDateTime) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {

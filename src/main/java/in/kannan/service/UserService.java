@@ -118,8 +118,8 @@ public class UserService {
 		RatingValidator.validateId(userId);
 		try {
 			LocalDateTime blockedDateTime = LocalDateTime.now();
-			UserDAO.updateBlockedByUserId(userId, blockedDateTime);
-			UserRatingDAO.updateActiveByUserId(userId);
+			UserDAO.update(userId, blockedDateTime);
+			UserRatingDAO.update(userId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e.getMessage());

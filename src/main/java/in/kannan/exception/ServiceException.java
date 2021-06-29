@@ -23,7 +23,7 @@ public class ServiceException extends Exception {
 	 * @param message the message to be thrown
 	 */
 
-	public ServiceException(Exception e, String message) {
+	public ServiceException(Throwable e, String message) {
 		super(message, e);
 	}
 

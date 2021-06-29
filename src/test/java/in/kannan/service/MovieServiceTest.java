@@ -20,11 +20,13 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 */
 	public static void displayMovieDetail() throws ServiceException {
-		List<Movie> list = MovieService.getAllMovies();
-		for (Movie movie : list) {
-			System.out.println(movie);
+		List<Movie> movie = MovieService.getAllMovies();
 
+		System.out.println("Sorting BY Date");
+		for (Movie m : movie) {
+			System.out.println(m);
 		}
+
 	}
 
 	/**
@@ -54,7 +56,7 @@ public class MovieServiceTest {
 	public static void main(String[] args) throws ServiceException, ValidationException {
 
 		// This method prints the only the movie detail without rating.
-		// displayMovieDetail();
+		displayMovieDetail();
 		// String date = "2021-05-03";
 
 		// This method saves the data
@@ -75,7 +77,7 @@ public class MovieServiceTest {
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)
-		System.out.println(MovieService.getMoviesWithRating());
+		// System.out.println(MovieService.getMoviesWithRating());
 
 		// counts number of user rated 8 and above 8 for all the movie
 		// System.out.println(MovieService.getMovieRatingByRating(3));

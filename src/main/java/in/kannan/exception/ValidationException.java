@@ -21,7 +21,7 @@ public class ValidationException extends Exception {
 	 * @param e       cached exception type
 	 * @param message the message to be thrown
 	 */
-	public ValidationException(Exception e, String message) {
+	public ValidationException(Throwable e, String message) {
 		super(message, e);
 	}
 

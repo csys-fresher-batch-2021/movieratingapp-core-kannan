@@ -1,6 +1,8 @@
 package in.kannan.service;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import in.kannan.dao.MovieDAO;
@@ -31,11 +33,14 @@ public class MovieService {
 	 */
 	public static List<Movie> getAllMovies() throws ServiceException {
 		try {
-			return MovieDAO.findAll();
+			List<Movie> movie = MovieDAO.findAll();
+			Comparator<Movie> sortByReleaseDate = Comparator.comparing(Movie::getReleaseDate);
+			Collections.sort(movie, sortByReleaseDate.reversed());
+			return movie;
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 	}
 
@@ -69,7 +74,7 @@ public class MovieService {
 			MovieDAO.save(movieDetail);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}
@@ -96,7 +101,7 @@ public class MovieService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 	}
 
@@ -113,7 +118,7 @@ public class MovieService {
 			return MovieDAO.findAllOrderByAverageRatingDesc();
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}
@@ -131,7 +136,7 @@ public class MovieService {
 			return MovieDAO.findAllMovieRating();
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}
@@ -159,7 +164,7 @@ public class MovieService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}
@@ -180,7 +185,7 @@ public class MovieService {
 		try {
 			return MovieDAO.findMovieRatingByRating(rating);
 		} catch (DBException e) {
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 	}
 
@@ -200,7 +205,7 @@ public class MovieService {
 			RatingValidator.validateRating(averageRating);
 			return MovieDAO.findMovieByAverageRating(averageRating);
 		} catch (DBException e) {
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}

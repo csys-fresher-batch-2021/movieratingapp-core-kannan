@@ -29,10 +29,11 @@ public class RatingService {
 	 * @param movieId
 	 * @param rating
 	 * @throws ServiceException
-	 * @throws ValidationException 
+	 * @throws ValidationException
 	 */
 
-	public static void addUserRating(Integer userId, Integer movieId, Integer rating) throws ServiceException, ValidationException {
+	public static void addUserRating(Integer userId, Integer movieId, Integer rating)
+			throws ServiceException, ValidationException {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
 			UserRating userRating = UserRatingDAO.findUserIdByUserIdAndMovieId(userId, movieId);
@@ -48,7 +49,7 @@ public class RatingService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 
 		}
 
@@ -66,7 +67,7 @@ public class RatingService {
 			UserRatingDAO.removeByUserIdAndMovieId(userID, movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 	}
 
@@ -93,7 +94,7 @@ public class RatingService {
 			count = UserRatingDAO.countRatingByMovieId(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 		return count;
 	}
@@ -123,7 +124,7 @@ public class RatingService {
 
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 		return count;
 
@@ -152,7 +153,7 @@ public class RatingService {
 			return UserRatingDAO.countRatingByMovieIdOrderByRatingDesc(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}

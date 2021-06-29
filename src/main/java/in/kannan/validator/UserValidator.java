@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import in.kannan.exception.ValidationException;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 
 public class UserValidator {
 	private UserValidator() {
@@ -122,16 +122,16 @@ public class UserValidator {
 	public static void validateUserDetails(String userName, String email, String password, String role)
 			throws ValidationException {
 		if (!isValidUserName(userName)) {
-			throw new ValidationException(MessageDisplay.INVALIDUSERNAME);
+			throw new ValidationException(MessageConstant.INVALIDUSERNAME);
 		}
 
 		else if (!isValidEmail(email)) {
-			throw new ValidationException(MessageDisplay.INVALIDEMAIL);
+			throw new ValidationException(MessageConstant.INVALIDEMAIL);
 		} else if (!isValidPassword(password)) {
-			throw new ValidationException(MessageDisplay.INVALIDPASSWORD);
+			throw new ValidationException(MessageConstant.INVALIDPASSWORD);
 
 		} else if (!isValidRole(role)) {
-			throw new ValidationException(MessageDisplay.INVALIDROLE);
+			throw new ValidationException(MessageConstant.INVALIDROLE);
 		}
 
 	}

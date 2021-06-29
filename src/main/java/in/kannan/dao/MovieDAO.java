@@ -10,28 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.kannan.dto.MovieRatingCountDTO;
-import in.kannan.exception.ConnectionException;
 import in.kannan.exception.DBException;
-import in.kannan.exception.ValidationException;
 import in.kannan.model.Movie;
 import in.kannan.model.MovieRating;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 
 public class MovieDAO {
 	/**
 	 * private constructor to hide the existing class
 	 */
+	private MovieDAO() {
+
+	}
+
 	private static final String MOVIE_ID = "movie_id";
 	private static final String MOVIE_NAME = "movie_name";
 	private static final String RELEASE_DATE = "release_date";
 	private static final String STATUS = "status";
 	private static final String AVERAGE_RATING = "average_rating";
-
-	private MovieDAO() {
-
-	}
+	private static final String COUNT = "count";
 
 	/**
 	 * This method returns the movie details as list.
@@ -48,7 +47,7 @@ public class MovieDAO {
 
 		try {
 			connection = ConnectionUtil.getConnection();
-			String sql = "select movie_id,movie_name,release_date,status from movies order by release_date desc";
+			String sql = "select movie_id,movie_name,release_date,status from movies";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -65,7 +64,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -79,10 +78,10 @@ public class MovieDAO {
 	 * 
 	 * @param movieName
 	 * @return
-	 * @throws ValidationException
+	 * @throws DBException
 	 */
 
-	public static Movie findMovieNameByExactMovieName(String movieName) throws ValidationException {
+	public static Movie findMovieNameByExactMovieName(String movieName) throws DBException {
 		Movie movie = null;
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -98,9 +97,9 @@ public class MovieDAO {
 				movie = new Movie(name);
 
 			}
-		} catch (ConnectionException | SQLException e) {
+		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new ValidationException(MessageDisplay.FINDMOVIEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, null);
 		}
@@ -134,9 +133,9 @@ public class MovieDAO {
 			pst.setBoolean(3, status);
 			pst.executeUpdate();
 
-		} catch (ConnectionException | SQLException e) {
+		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.SAVEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_SAVE_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -166,9 +165,9 @@ public class MovieDAO {
 
 			}
 
-		} catch (ConnectionException | SQLException e) {
+		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDMOVIEIDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE_ID);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -194,9 +193,9 @@ public class MovieDAO {
 			pst.setInt(1, movieId);
 			pst.executeUpdate();
 
-		} catch (ConnectionException | SQLException e) {
+		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.DELETEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_DELETE_MOVIE);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -240,7 +239,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -286,10 +285,10 @@ public class MovieDAO {
 				rating = new MovieRating(movie, rate);
 
 			}
-		} catch (SQLException | NullPointerException e) {
+		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -333,7 +332,7 @@ public class MovieDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(e, MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -373,7 +372,7 @@ public class MovieDAO {
 				Date date = rs.getDate(RELEASE_DATE);
 				LocalDate releaseDate = date.toLocalDate();
 				boolean status = rs.getBoolean(STATUS);
-				Integer count = rs.getInt("count");
+				Integer count = rs.getInt(COUNT);
 				Movie movie = new Movie(movieId, movieName, releaseDate, status);
 
 				MovieRatingCountDTO countRating = new MovieRatingCountDTO(movie, count);
@@ -382,7 +381,7 @@ public class MovieDAO {
 
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.COUNTERROR);
+			throw new DBException(e, MessageConstant.UNABLE_COUNT_USER_RATINGS);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -430,7 +429,7 @@ public class MovieDAO {
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.SORTERROR);
+			throw new DBException(e, MessageConstant.UNABLE_SORT_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}

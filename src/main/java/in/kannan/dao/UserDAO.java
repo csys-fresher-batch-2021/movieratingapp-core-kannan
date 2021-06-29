@@ -141,6 +141,40 @@ public class UserDAO {
 	}
 
 	/**
+	 * This method checks the presence of email for particular user.
+	 * 
+	 * @param email
+	 * @return
+	 * @throws DBException
+	 */
+
+	public static User findByEmail(String email) throws DBException {
+		User user = null;
+		Connection connection = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			connection = ConnectionUtil.getConnection();
+			String sql = "select email,password from users where email =? ";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, email);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				String mailId = rs.getString("email");
+				String password = rs.getString("password");
+				user = new User(mailId, password);
+
+			}
+		} catch (SQLException e) {
+			Logger.trace(e);
+			throw new DBException(MessageDisplay.FINDERROR);
+		} finally {
+			ConnectionUtil.close(rs, pst, connection);
+		}
+		return user;
+	}
+
+	/**
 	 * This method updates the blocked column of a given user id to false
 	 * 
 	 * @param userId
@@ -179,7 +213,7 @@ public class UserDAO {
 	 * @throws DBException
 	 */
 
-	public static User findByEmail(String email) throws DBException {
+	public static User findByEmailAndBlocked(String email) throws DBException {
 		User user = null;
 		Connection connection = null;
 		PreparedStatement pst = null;

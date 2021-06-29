@@ -62,7 +62,7 @@ public class UserService {
 		try {
 
 			user = UserDAO.findByEmailAndPassword(email, password);
-			User fakeUser = UserDAO.findByEmail(email);
+			User fakeUser = UserDAO.findByEmailAndBlocked(email);
 			if (fakeUser != null) {
 				throw new ServiceException(MessageDisplay.BLOCKMESSAGE);
 			}
@@ -97,6 +97,11 @@ public class UserService {
 			throws ValidationException, ServiceException {
 		User user = null;
 		try {
+
+			User userEmail = UserDAO.findByEmail(email);
+			if (userEmail != null) {
+				throw new ServiceException(MessageDisplay.ALREADYREGISTERED);
+			}
 			UserValidator.validateUserDetails(userName, email, password, role);
 			user = new User();
 			user.setName(userName);

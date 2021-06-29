@@ -9,6 +9,7 @@ import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
+import in.kannan.util.MessageDisplay;
 import in.kannan.validator.RatingValidator;
 import in.kannan.validator.UserValidator;
 
@@ -61,6 +62,10 @@ public class UserService {
 		try {
 
 			user = UserDAO.findByEmailAndPassword(email, password);
+			User fakeUser = UserDAO.findByEmailAndBlocked(email);
+			if (fakeUser != null) {
+				throw new ServiceException(MessageDisplay.BLOCKMESSAGE);
+			}
 
 			if (user == null) {
 				throw new ServiceException("Invalid Login credentials");
@@ -92,6 +97,11 @@ public class UserService {
 			throws ValidationException, ServiceException {
 		User user = null;
 		try {
+
+			User userEmail = UserDAO.findByEmail(email);
+			if (userEmail != null) {
+				throw new ServiceException(MessageDisplay.ALREADYREGISTERED);
+			}
 			UserValidator.validateUserDetails(userName, email, password, role);
 			user = new User();
 			user.setName(userName);
@@ -118,8 +128,8 @@ public class UserService {
 		RatingValidator.validateId(userId);
 		try {
 			LocalDateTime blockedDateTime = LocalDateTime.now();
-			UserDAO.updateBlockedByUserId(userId, blockedDateTime);
-			UserRatingDAO.updateActiveByUserId(userId);
+			UserDAO.update(userId, blockedDateTime);
+			UserRatingDAO.update(userId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e.getMessage());

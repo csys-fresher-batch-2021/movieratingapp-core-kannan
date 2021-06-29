@@ -353,7 +353,7 @@ public class UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public static void updateActiveByUserId(Integer userId) throws DBException {
+	public static void update(Integer userId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
 		try {

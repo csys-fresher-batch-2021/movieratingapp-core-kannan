@@ -2,10 +2,9 @@ package in.kannan.service;
 
 import java.time.LocalDateTime;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
-import in.kannan.dao.impl.UserDAOImpl;
-import in.kannan.dao.impl.UserRatingDAOImpl;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
@@ -20,8 +19,8 @@ public class UserService {
 		// private constructor to hide the implicit class
 	}
 
-	private static UserDAO userDAO = new UserDAOImpl();
-	private static UserRatingDAO userRatingDAO = new UserRatingDAOImpl();
+	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
 
 	/**
 	 * This method is used for log in by the user .It checks the validity of email

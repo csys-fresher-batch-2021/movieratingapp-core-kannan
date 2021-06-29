@@ -5,10 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserRatingDAO;
-import in.kannan.dao.impl.MovieDAOImpl;
-import in.kannan.dao.impl.UserRatingDAOImpl;
 import in.kannan.dto.MovieRatingCountDTO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
@@ -27,8 +26,8 @@ public class MovieService {
 		super();
 	}
 
-	private static MovieDAO movieDAO = new MovieDAOImpl();
-	private static UserRatingDAO userRatingDAO = new UserRatingDAOImpl();
+	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
 
 	/**
 	 * This method fetches all the details of the movie.

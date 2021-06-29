@@ -2,12 +2,10 @@ package in.kannan.service;
 
 import java.util.List;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
-import in.kannan.dao.impl.MovieDAOImpl;
-import in.kannan.dao.impl.UserDAOImpl;
-import in.kannan.dao.impl.UserRatingDAOImpl;
 import in.kannan.dto.MovieRatingDTO;
 import in.kannan.exception.DBException;
 import in.kannan.exception.ServiceException;
@@ -23,9 +21,9 @@ public class RatingService {
 		// private constructor to hide the existing class
 	}
 
-	private static MovieDAO movieDAO = new MovieDAOImpl();
-	private static UserDAO userDAO = new UserDAOImpl();
-	private static UserRatingDAO userRatingDAO = new UserRatingDAOImpl();
+	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
+	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
 
 	/**
 	 * This method is used to add the users rating.It validates the input details,

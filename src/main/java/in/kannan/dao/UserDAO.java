@@ -19,6 +19,8 @@ public class UserDAO {
 
 	}
 
+	public static final String EMAIL = "email";
+
 	/**
 	 * This method returns the detail for the given email and password.
 	 * 
@@ -47,7 +49,7 @@ public class UserDAO {
 				Integer id = rs.getInt("user_id");
 				String name = rs.getString("name");
 				String role = rs.getString("role");
-				String userEmail = rs.getString("email");
+				String userEmail = rs.getString(EMAIL);
 				user = new User(id, name, userEmail, role);
 			}
 		}
@@ -160,7 +162,7 @@ public class UserDAO {
 			pst.setString(1, email);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				String mailId = rs.getString("email");
+				String mailId = rs.getString(EMAIL);
 				String password = rs.getString("password");
 				user = new User(mailId, password);
 
@@ -225,7 +227,7 @@ public class UserDAO {
 			pst.setString(1, email);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				String mailId = rs.getString("email");
+				String mailId = rs.getString(EMAIL);
 				String password = rs.getString("password");
 				user = new User(mailId, password);
 

@@ -9,7 +9,7 @@ import in.kannan.exception.ServiceException;
 import in.kannan.exception.ValidationException;
 import in.kannan.model.User;
 import in.kannan.util.Logger;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 import in.kannan.validator.RatingValidator;
 import in.kannan.validator.UserValidator;
 
@@ -42,7 +42,7 @@ public class UserService {
 		} catch (DBException e) {
 			Logger.trace(e);
 
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 		return user;
@@ -64,7 +64,7 @@ public class UserService {
 			user = UserDAO.findByEmailAndPassword(email, password);
 			User fakeUser = UserDAO.findByEmailAndBlocked(email);
 			if (fakeUser != null) {
-				throw new ServiceException(MessageDisplay.BLOCKMESSAGE);
+				throw new ServiceException(MessageConstant.BLOCKMESSAGE);
 			}
 
 			if (user == null) {
@@ -76,7 +76,7 @@ public class UserService {
 		} catch (DBException e) {
 			Logger.trace(e);
 
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 		return user;
@@ -100,7 +100,7 @@ public class UserService {
 
 			User userEmail = UserDAO.findByEmail(email);
 			if (userEmail != null) {
-				throw new ServiceException(MessageDisplay.ALREADYREGISTERED);
+				throw new ServiceException(MessageConstant.ALREADYREGISTERED);
 			}
 			UserValidator.validateUserDetails(userName, email, password, role);
 			user = new User();
@@ -112,7 +112,7 @@ public class UserService {
 			UserDAO.save(user);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 
 	}
@@ -132,7 +132,7 @@ public class UserService {
 			UserRatingDAO.update(userId);
 		} catch (DBException e) {
 			Logger.trace(e);
-			throw new ServiceException(e.getMessage());
+			throw new ServiceException(e, e.getMessage());
 		}
 	}
 

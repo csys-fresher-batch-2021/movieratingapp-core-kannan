@@ -14,12 +14,19 @@ import in.kannan.model.MovieRating;
 import in.kannan.model.UserRating;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 
 public class UserRatingDAO {
 	private UserRatingDAO() {
 		// private constructor to hide the implicit class
 	}
+
+	private static final String MOVIE_ID = "movie_id";
+	private static final String AVERAGE_RATING = "average_rating";
+	private static final String USER_ID = "user_Id";
+	private static final String USER_RATED = "users_rated";
+	private static final String COUNT = "count";
+	private static final String RATINGS = "rating";
 
 	/**
 	 * This method saves the user rating.
@@ -48,7 +55,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.SAVERATINGERROR);
+			throw new DBException(e, MessageConstant.UNABLE_SAVE_USER_RATINGS);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -80,7 +87,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.SAVEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_SAVE_USER_RATINGS);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -101,7 +108,7 @@ public class UserRatingDAO {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.DATAERROR);
+			throw new DBException(MessageConstant.DATAERROR);
 		}
 
 	}
@@ -126,8 +133,8 @@ public class UserRatingDAO {
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Integer id = rs.getInt("movie_id");
-				double rating = rs.getDouble("average_rating");
+				Integer id = rs.getInt(MOVIE_ID);
+				double rating = rs.getDouble(AVERAGE_RATING);
 
 				MovieRating movieRating = new MovieRating(id, rating);
 				ratingList.add(movieRating);
@@ -136,7 +143,7 @@ public class UserRatingDAO {
 		} catch (SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER_ID);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 
@@ -170,14 +177,14 @@ public class UserRatingDAO {
 
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				Integer id = rs.getInt("user_Id");
+				Integer id = rs.getInt(USER_ID);
 				userRating = new UserRating(id);
 			}
 
 		} catch (ConnectionException | SQLException e) {
 
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER_ID);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -205,7 +212,7 @@ public class UserRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.DELETEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_DELETE_MOVIE);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -234,7 +241,7 @@ public class UserRatingDAO {
 
 		} catch (ConnectionException | SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.DELETEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_DELETE_USER_RATINGS);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 
@@ -262,12 +269,12 @@ public class UserRatingDAO {
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				count = rs.getInt("users_rated");
+				count = rs.getInt(USER_RATED);
 
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.COUNTERROR);
+			throw new DBException(e, MessageConstant.UNABLE_COUNT_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -297,12 +304,12 @@ public class UserRatingDAO {
 			pst.setInt(2, movieId);
 			rs = pst.executeQuery();
 			if (rs.next()) {
-				count = rs.getInt("count");
+				count = rs.getInt(COUNT);
 
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.COUNTERROR);
+			throw new DBException(e, MessageConstant.UNABLE_COUNT_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -332,14 +339,14 @@ public class UserRatingDAO {
 			pst.setInt(1, movieId);
 			rs = pst.executeQuery();
 			while (rs.next()) {
-				Double rating = rs.getDouble("rating");
-				Integer count = rs.getInt("count");
+				Double rating = rs.getDouble(RATINGS);
+				Integer count = rs.getInt(COUNT);
 				counts = new MovieRatingDTO(rating, count);
 				counting.add(counts);
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.COUNTERROR);
+			throw new DBException(e, MessageConstant.UNABLE_COUNT_MOVIE);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -363,11 +370,11 @@ public class UserRatingDAO {
 			pst.setInt(1, userId);
 			int rows = pst.executeUpdate();
 
-			Logger.message(MessageDisplay.UPDATEMESSAGE + rows + " rows");
+			Logger.message(MessageConstant.UPDATEMESSAGE + rows + " rows");
 
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.UPDATEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_UPDATE_USER_RATINGS);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}

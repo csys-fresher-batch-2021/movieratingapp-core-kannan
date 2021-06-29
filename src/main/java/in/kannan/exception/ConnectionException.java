@@ -23,7 +23,7 @@ public class ConnectionException extends RuntimeException {
 	 * @param message the message to be thrown
 	 */
 
-	public ConnectionException(Exception e, String message) {
+	public ConnectionException(Throwable e, String message) {
 		super(message, e);
 	}
 

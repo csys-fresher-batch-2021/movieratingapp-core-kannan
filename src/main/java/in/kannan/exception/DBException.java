@@ -23,7 +23,7 @@ public class DBException extends Exception {
 	 * @param message the message to be thrown
 	 */
 
-	public DBException(Exception e, String message) {
+	public DBException(Throwable e, String message) {
 		super(message, e);
 
 	}

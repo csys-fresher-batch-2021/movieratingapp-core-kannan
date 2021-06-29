@@ -1,7 +1,7 @@
 package in.kannan.validator;
 
 import in.kannan.exception.ValidationException;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 
 public class RatingValidator {
 	private RatingValidator() {
@@ -85,11 +85,11 @@ public class RatingValidator {
 
 	public static void validateRating(Integer userId, Integer movieId, Integer rating) throws ValidationException {
 		if (!isValidId(userId)) {
-			throw new ValidationException(MessageDisplay.INVALIDUSERID);
+			throw new ValidationException(MessageConstant.INVALIDUSERID);
 		} else if (!isValidId(movieId)) {
-			throw new ValidationException(MessageDisplay.INVALIDMOVIEID);
+			throw new ValidationException(MessageConstant.INVALIDMOVIEID);
 		} else if (!isValidRating(rating)) {
-			throw new ValidationException(MessageDisplay.INVALIDRATING);
+			throw new ValidationException(MessageConstant.INVALIDRATING);
 		}
 	}
 
@@ -104,9 +104,9 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating, String movieName) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException(MessageDisplay.INVALIDRATING);
+			throw new ValidationException(MessageConstant.INVALIDRATING);
 		} else if (!isValidMovieName(movieName)) {
-			throw new ValidationException(MessageDisplay.INVALIDMOVIENAME);
+			throw new ValidationException(MessageConstant.INVALIDMOVIENAME);
 		}
 	}
 
@@ -121,7 +121,7 @@ public class RatingValidator {
 
 	public static void validateRating(Integer rating) throws ValidationException {
 		if (!isValidRating(rating)) {
-			throw new ValidationException(MessageDisplay.INVALIDRATING);
+			throw new ValidationException(MessageConstant.INVALIDRATING);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class RatingValidator {
 	 */
 	public static void validateId(Integer id) throws ValidationException {
 		if (!isValidId(id)) {
-			throw new ValidationException(MessageDisplay.INVALIDUSERID);
+			throw new ValidationException(MessageConstant.INVALIDUSERID);
 		}
 	}
 

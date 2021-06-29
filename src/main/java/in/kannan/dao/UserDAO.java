@@ -11,7 +11,7 @@ import in.kannan.exception.DBException;
 import in.kannan.model.User;
 import in.kannan.util.ConnectionUtil;
 import in.kannan.util.Logger;
-import in.kannan.util.MessageDisplay;
+import in.kannan.util.MessageConstant;
 
 public class UserDAO {
 	private UserDAO() {
@@ -20,6 +20,10 @@ public class UserDAO {
 	}
 
 	public static final String EMAIL = "email";
+	public static final String PASSWORD = "password";
+	public static final String NAME = "name";
+	public static final String ROLE = "role";
+	public static final String ID = "user_id";
 
 	/**
 	 * This method returns the detail for the given email and password.
@@ -46,9 +50,9 @@ public class UserDAO {
 
 			if (rs.next()) {
 
-				Integer id = rs.getInt("user_id");
-				String name = rs.getString("name");
-				String role = rs.getString("role");
+				Integer id = rs.getInt(ID);
+				String name = rs.getString(NAME);
+				String role = rs.getString(ROLE);
 				String userEmail = rs.getString(EMAIL);
 				user = new User(id, name, userEmail, role);
 			}
@@ -56,7 +60,7 @@ public class UserDAO {
 
 		catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -90,7 +94,7 @@ public class UserDAO {
 
 			if (rs.next()) {
 
-				String role = rs.getString("role");
+				String role = rs.getString(ROLE);
 
 				user = new User(role);
 			}
@@ -98,7 +102,7 @@ public class UserDAO {
 
 		catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDROLEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -135,7 +139,7 @@ public class UserDAO {
 			pst.execute();
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.SAVEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_SAVE_USER);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -163,13 +167,13 @@ public class UserDAO {
 			rs = pst.executeQuery();
 			if (rs.next()) {
 				String mailId = rs.getString(EMAIL);
-				String password = rs.getString("password");
+				String password = rs.getString(PASSWORD);
 				user = new User(mailId, password);
 
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}
@@ -196,11 +200,11 @@ public class UserDAO {
 			pst.setInt(2, userId);
 			int rows = pst.executeUpdate();
 			if (rows == 1) {
-				Logger.message(MessageDisplay.UPDATEMESSAGE);
+				Logger.message(MessageConstant.UPDATEMESSAGE);
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.UPDATEERROR);
+			throw new DBException(e, MessageConstant.UNABLE_UPDATE_USER);
 		} finally {
 			ConnectionUtil.close(pst, connection);
 		}
@@ -228,13 +232,13 @@ public class UserDAO {
 			rs = pst.executeQuery();
 			if (rs.next()) {
 				String mailId = rs.getString(EMAIL);
-				String password = rs.getString("password");
+				String password = rs.getString(PASSWORD);
 				user = new User(mailId, password);
 
 			}
 		} catch (SQLException e) {
 			Logger.trace(e);
-			throw new DBException(MessageDisplay.FINDERROR);
+			throw new DBException(e, MessageConstant.UNABLE_FIND_USER);
 		} finally {
 			ConnectionUtil.close(rs, pst, connection);
 		}

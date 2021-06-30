@@ -30,6 +30,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @return the user list
 	 * @throws DBException
 	 */
+	@Override
 	public User findByEmailAndPassword(String email, String password) throws DBException {
 
 		Connection connection = null;
@@ -73,7 +74,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public User findRole(Integer userId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -117,7 +118,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param role
 	 * @throws DBException
 	 */
-
+	@Override
 	public void save(User user) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -150,7 +151,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public User findByEmail(String email) throws DBException {
 		User user = null;
 		Connection connection = null;
@@ -183,7 +184,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @param userId
 	 * @throws DBException
 	 */
-
+	@Override
 	public void update(Integer userId, LocalDateTime modifiedDateTime) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -215,7 +216,7 @@ public class UserDAOImpl implements UserDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public User findByEmailAndBlocked(String email) throws DBException {
 		User user = null;
 		Connection connection = null;
@@ -241,4 +242,5 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return user;
 	}
+
 }

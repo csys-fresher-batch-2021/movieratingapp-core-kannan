@@ -56,11 +56,11 @@ public class MovieServiceTest {
 	public static void main(String[] args) throws ServiceException, ValidationException {
 
 		// This method prints the only the movie detail without rating.
-		displayMovieDetail();
+		// displayMovieDetail();
 		// String date = "2021-05-03";
 
 		// This method saves the data
-		// MovieService.addMovie("Dola", null, true);
+		// MovieService.addMovie("Trip", "2021-02-05", true);
 
 		// This method returns all movie along with their rating without order.
 		// System.out.println(MovieService.getAllMovieWithRating());
@@ -77,12 +77,12 @@ public class MovieServiceTest {
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)
-		// System.out.println(MovieService.getMoviesWithRating());
+		System.out.println(MovieService.getMoviesWithRating());
 
-		// counts number of user rated 8 and above 8 for all the movie
+		// counts number of user rated 3 and above 3 for all the movie
 		// System.out.println(MovieService.getMovieRatingByRating(3));
 
-		// It prints the movie with average rating greater than and equal to 6
+		// It prints the movie with average rating greater than and equal to 3
 		// System.out.println(MovieService.getMovieByAverageRating(3));
 
 	}

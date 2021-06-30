@@ -217,7 +217,7 @@ public class MovieDAOImpl implements MovieDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_sort_view";
+			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_view order by average_rating desc";
 
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
@@ -302,7 +302,7 @@ public class MovieDAOImpl implements MovieDAO {
 	 * @throws DBException
 	 */
 	@Override
-	public List<MovieRating> findAllMovieRating() throws DBException {
+	public List<MovieRating> findAllMovieRatingOrderByReleaseDate() throws DBException {
 		List<MovieRating> movieRating = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -311,7 +311,7 @@ public class MovieDAOImpl implements MovieDAO {
 		try {
 			connection = ConnectionUtil.getConnection();
 
-			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_view";
+			String sql = "select movie_id,movie_name,release_date,status,average_rating from movie_ratings_view order by release_date desc";
 			pst = connection.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {

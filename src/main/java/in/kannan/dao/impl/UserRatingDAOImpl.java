@@ -34,7 +34,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @param rating
 	 * @throws DBException
 	 */
-
+	@Override
 	public void save(Integer userId, Integer movieId, Integer rating) throws DBException {
 
 		Connection connection = null;
@@ -68,7 +68,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @param rating
 	 * @throws DBException
 	 */
-
+	@Override
 	public void saveMovieId(Integer movieId) throws DBException {
 
 		Connection connection = null;
@@ -99,7 +99,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public void exist(PreparedStatement ps) throws DBException {
 
 		try {
@@ -118,7 +118,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return rating list
 	 * @throws DBException
 	 */
-
+	@Override
 	public List<MovieRating> findAverageRating() throws DBException {
 		List<MovieRating> ratingList = new ArrayList<>();
 		Connection connection = null;
@@ -159,7 +159,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return UserRating object as userRating
 	 * @throws DBException
 	 */
-
+	@Override
 	public UserRating findUserIdByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException {
 		UserRating userRating = null;
 		Connection connection = null;
@@ -197,7 +197,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @param movieId
 	 * @throws DBException
 	 */
-
+	@Override
 	public void remove(Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -225,7 +225,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @param movieId
 	 * @throws DBException
 	 */
-
+	@Override
 	public void removeByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;
@@ -254,7 +254,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return counting of users rated
 	 * @throws DBException
 	 */
-
+	@Override
 	public Integer countRatingByMovieId(Integer movieId) throws DBException {
 		Integer count = null;
 		Connection connection = null;
@@ -288,7 +288,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public Integer countRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException {
 		Integer count = null;
 		Connection connection = null;
@@ -323,7 +323,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @return
 	 * @throws DBException
 	 */
-
+	@Override
 	public List<MovieRatingDTO> countRatingByMovieIdOrderByRatingDesc(Integer movieId) throws DBException {
 		List<MovieRatingDTO> counting = new ArrayList<>();
 		MovieRatingDTO counts = null;
@@ -357,7 +357,7 @@ public class UserRatingDAOImpl implements UserRatingDAO {
 	 * @param userId
 	 * @throws DBException
 	 */
-
+	@Override
 	public void update(Integer userId) throws DBException {
 		Connection connection = null;
 		PreparedStatement pst = null;

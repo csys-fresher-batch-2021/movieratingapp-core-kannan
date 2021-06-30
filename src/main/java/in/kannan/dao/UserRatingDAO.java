@@ -18,7 +18,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void save(Integer userId, Integer movieId, Integer rating) throws DBException;
+	void save(Integer userId, Integer movieId, Integer rating) throws DBException;
 
 	/**
 	 * This method saves the movie_id .
@@ -29,7 +29,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void saveMovieId(Integer movieId) throws DBException;
+	void saveMovieId(Integer movieId) throws DBException;
 
 	/**
 	 * check the proper insertion into table.
@@ -39,7 +39,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void exist(PreparedStatement ps) throws DBException;
+	void exist(PreparedStatement ps) throws DBException;
 
 	/**
 	 * This method returns the average rating for the particular movie id from
@@ -49,7 +49,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public List<MovieRating> findAverageRating() throws DBException;
+	List<MovieRating> findAverageRating() throws DBException;
 
 	/**
 	 * This method finds the data for the particular user id and movie id from
@@ -61,7 +61,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public UserRating findUserIdByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException;
+	UserRating findUserIdByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException;
 
 	/**
 	 * This method removes particular data for particular id from database.
@@ -70,7 +70,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void remove(Integer movieId) throws DBException;
+	void remove(Integer movieId) throws DBException;
 
 	/**
 	 * This method removes a particular data for the given movie id.
@@ -80,7 +80,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void removeByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException;
+	void removeByUserIdAndMovieId(Integer userId, Integer movieId) throws DBException;
 
 	/**
 	 * This method counts the number of users rated for the particular movie id
@@ -90,7 +90,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public Integer countRatingByMovieId(Integer movieId) throws DBException;
+	Integer countRatingByMovieId(Integer movieId) throws DBException;
 
 	/**
 	 * This method counts number of user rated for the particular movie and
@@ -102,7 +102,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public Integer countRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException;
+	Integer countRatingByRatingAndMovieId(Integer rating, Integer movieId) throws DBException;
 
 	/**
 	 * This method counts the number of user rated for particular rating for the
@@ -114,7 +114,7 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public List<MovieRatingDTO> countRatingByMovieIdOrderByRatingDesc(Integer movieId) throws DBException;
+	List<MovieRatingDTO> countRatingByMovieIdOrderByRatingDesc(Integer movieId) throws DBException;
 
 	/**
 	 * This method updates the active column of user rating to false .
@@ -123,6 +123,6 @@ public interface UserRatingDAO {
 	 * @throws DBException
 	 */
 
-	public void update(Integer userId) throws DBException;
+	void update(Integer userId) throws DBException;
 
 }

@@ -14,7 +14,7 @@ public interface UserDAO {
 	 * @return the user list
 	 * @throws DBException
 	 */
-	public User findByEmailAndPassword(String email, String password) throws DBException;
+	User findByEmailAndPassword(String email, String password) throws DBException;
 
 	/**
 	 * This method returns the object which holds the role of the users.
@@ -24,7 +24,7 @@ public interface UserDAO {
 	 * @throws DBException
 	 */
 
-	public User findRole(Integer userId) throws DBException;
+	User findRole(Integer userId) throws DBException;
 
 	/**
 	 * This method saves the particular user data .
@@ -36,7 +36,7 @@ public interface UserDAO {
 	 * @throws DBException
 	 */
 
-	public void save(User user) throws DBException;
+	void save(User user) throws DBException;
 
 	/**
 	 * This method checks the presence of email for particular user.
@@ -46,7 +46,7 @@ public interface UserDAO {
 	 * @throws DBException
 	 */
 
-	public User findByEmail(String email) throws DBException;
+	User findByEmail(String email) throws DBException;
 
 	/**
 	 * This method updates the blocked column of a given user id to false
@@ -55,7 +55,7 @@ public interface UserDAO {
 	 * @throws DBException
 	 */
 
-	public void update(Integer userId, LocalDateTime modifiedDateTime) throws DBException;
+	void update(Integer userId, LocalDateTime modifiedDateTime) throws DBException;
 
 	/**
 	 * This method checks the given id with blocked column to get the data to login
@@ -65,6 +65,6 @@ public interface UserDAO {
 	 * @throws DBException
 	 */
 
-	public User findByEmailAndBlocked(String email) throws DBException;
+	User findByEmailAndBlocked(String email) throws DBException;
 
 }

@@ -19,12 +19,6 @@ import in.kannan.validator.MovieValidator;
 import in.kannan.validator.RatingValidator;
 
 public class MovieService {
-	/**
-	 * private constructor to hide public class
-	 */
-	private MovieService() {
-		super();
-	}
 
 	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
 	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
@@ -139,7 +133,7 @@ public class MovieService {
 	public static List<MovieRating> getAllMovieWithRating() throws ServiceException {
 
 		try {
-			return movieDAO.findAllMovieRating();
+			return movieDAO.findAllMovieRatingOrderByReleaseDate();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());

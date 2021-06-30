@@ -11,21 +11,22 @@ public class UserServiceTest {
 		// Checks the admin Login
 		// System.out.println(UserService.adminLogin("kannanraemes@hgmail.com",
 		// "fre3232SFE2#"));
-		// System.out.println(UserService.adminLogin("sankaran12@yahoo.com",
-		// "LO122nei!@n"));
+		System.out.println(UserService.adminLogin("subra245@gmail.com", "@#34asDEw"));
 		// System.out.println(UserService.adminLogin("naraya@live.com",
 		// "jefien344@##AAS"));
 
 		// This method checks the user Login
-		System.out.println(UserService.userLogin("siva999@gmail.com", "12^%vfdsAD"));
+		// System.out.println(UserService.userLogin("ganesh34@yahoo.com",
+		// "67awVEsf!@f"));
 
 		// This method registers the particular user.
-		UserService.userRegistration("Ashwin", "ashwin1234@gmail.com", "as12AS@#Dwe", "ADMIN");
+		// UserService.userRegistration("Kumerasan", "kumar1234@gmail.com",
+		// "as12AS@#Dwe", "USER");
 
 		// UserService.userRegistration("Vinoth", "vino123@gmail.com", "ASaf12@#jK!2",
 		// "ADMIN");
 
-		UserService.blockUser(5);
+		// UserService.blockUser(5);
 
 	}
 

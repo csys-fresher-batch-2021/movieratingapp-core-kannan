@@ -85,7 +85,7 @@ public interface MovieDAO {
 	 * @throws DBException
 	 */
 
-	List<MovieRating> findAllMovieRating() throws DBException;
+	List<MovieRating> findAllMovieRatingOrderByReleaseDate() throws DBException;
 
 	/**
 	 * This method returns the number of users rated along with the list of movies

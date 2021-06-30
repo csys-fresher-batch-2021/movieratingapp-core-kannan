@@ -19,6 +19,9 @@ import in.kannan.validator.MovieValidator;
 import in.kannan.validator.RatingValidator;
 
 public class MovieService {
+	private MovieService() {
+
+	}
 
 	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
 	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserRatingDAO;
 import in.kannan.dto.MovieRatingCountDTO;
@@ -18,12 +19,12 @@ import in.kannan.validator.MovieValidator;
 import in.kannan.validator.RatingValidator;
 
 public class MovieService {
-	/**
-	 * private constructor to hide public class
-	 */
 	private MovieService() {
-		super();
+
 	}
+
+	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
 
 	/**
 	 * This method fetches all the details of the movie.
@@ -33,7 +34,8 @@ public class MovieService {
 	 */
 	public static List<Movie> getAllMovies() throws ServiceException {
 		try {
-			List<Movie> movie = MovieDAO.findAll();
+
+			List<Movie> movie = movieDAO.findAll();
 			Comparator<Movie> sortByReleaseDate = Comparator.comparing(Movie::getReleaseDate);
 			Collections.sort(movie, sortByReleaseDate.reversed());
 			return movie;
@@ -62,7 +64,8 @@ public class MovieService {
 			String newMovieName = movieName.trim();
 			MovieValidator.validateMovie(newMovieName, releaseDate);
 			LocalDate date = LocalDate.parse(releaseDate);
-			Movie movie = MovieDAO.findMovieNameByExactMovieName(newMovieName);
+
+			Movie movie = movieDAO.findMovieNameByExactMovieName(newMovieName);
 			if (movie != null) {
 				throw new ServiceException("Movie Already Registered");
 			}
@@ -71,7 +74,7 @@ public class MovieService {
 			movieDetail.setReleaseDate(date);
 			movieDetail.setStatus(status);
 
-			MovieDAO.save(movieDetail);
+			movieDAO.save(movieDetail);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -91,13 +94,13 @@ public class MovieService {
 			String newMovieName = movieName.trim();
 			MovieValidator.validateMovieName(newMovieName);
 
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			Integer movieId = movieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie is not registered");
 			}
 
-			UserRatingDAO.remove(movieId);
-			MovieDAO.remove(movieId);
+			userRatingDAO.remove(movieId);
+			movieDAO.remove(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -115,7 +118,7 @@ public class MovieService {
 	public static List<MovieRating> getMoviesWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findAllOrderByAverageRatingDesc();
+			return movieDAO.findAllOrderByAverageRatingDesc();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -133,7 +136,7 @@ public class MovieService {
 	public static List<MovieRating> getAllMovieWithRating() throws ServiceException {
 
 		try {
-			return MovieDAO.findAllMovieRating();
+			return movieDAO.findAllMovieRatingOrderByReleaseDate();
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -155,12 +158,12 @@ public class MovieService {
 
 		try {
 			MovieValidator.validateMovieName(movieName);
-			Integer movieId = MovieDAO.findMovieIdByMovieName(movieName);
+			Integer movieId = movieDAO.findMovieIdByMovieName(movieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie is Not Registered ");
 			}
 
-			return MovieDAO.findAllByMovieId(movieId);
+			return movieDAO.findAllByMovieId(movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -183,7 +186,7 @@ public class MovieService {
 			throws ServiceException, ValidationException {
 		RatingValidator.validateRating(rating);
 		try {
-			return MovieDAO.findMovieRatingByRating(rating);
+			return movieDAO.findMovieRatingByRating(rating);
 		} catch (DBException e) {
 			throw new ServiceException(e, e.getMessage());
 		}
@@ -203,7 +206,7 @@ public class MovieService {
 			throws ValidationException, ServiceException {
 		try {
 			RatingValidator.validateRating(averageRating);
-			return MovieDAO.findMovieByAverageRating(averageRating);
+			return movieDAO.findMovieByAverageRating(averageRating);
 		} catch (DBException e) {
 			throw new ServiceException(e, e.getMessage());
 		}

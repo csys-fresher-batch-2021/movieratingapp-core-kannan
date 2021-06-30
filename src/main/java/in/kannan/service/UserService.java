@@ -2,6 +2,7 @@ package in.kannan.service;
 
 import java.time.LocalDateTime;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
 import in.kannan.exception.DBException;
@@ -18,6 +19,9 @@ public class UserService {
 		// private constructor to hide the implicit class
 	}
 
+	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
+
 	/**
 	 * This method is used for log in by the user .It checks the validity of email
 	 * and password, checks for correct email and password and also checks the user
@@ -31,7 +35,7 @@ public class UserService {
 		User user = null;
 		try {
 
-			user = UserDAO.findByEmailAndPassword(email, password);
+			user = userDAO.findByEmailAndPassword(email, password);
 
 			if (user == null) {
 				throw new ServiceException("Invalid Login credentialls");
@@ -61,8 +65,8 @@ public class UserService {
 		User user = null;
 		try {
 
-			user = UserDAO.findByEmailAndPassword(email, password);
-			User fakeUser = UserDAO.findByEmailAndBlocked(email);
+			user = userDAO.findByEmailAndPassword(email, password);
+			User fakeUser = userDAO.findByEmailAndBlocked(email);
 			if (fakeUser != null) {
 				throw new ServiceException(MessageConstant.BLOCKMESSAGE);
 			}
@@ -98,7 +102,7 @@ public class UserService {
 		User user = null;
 		try {
 
-			User userEmail = UserDAO.findByEmail(email);
+			User userEmail = userDAO.findByEmail(email);
 			if (userEmail != null) {
 				throw new ServiceException(MessageConstant.ALREADYREGISTERED);
 			}
@@ -109,7 +113,7 @@ public class UserService {
 			user.setPassword(password);
 			user.setRole(role);
 
-			UserDAO.save(user);
+			userDAO.save(user);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -128,8 +132,8 @@ public class UserService {
 		RatingValidator.validateId(userId);
 		try {
 			LocalDateTime blockedDateTime = LocalDateTime.now();
-			UserDAO.update(userId, blockedDateTime);
-			UserRatingDAO.update(userId);
+			userDAO.update(userId, blockedDateTime);
+			userRatingDAO.update(userId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());

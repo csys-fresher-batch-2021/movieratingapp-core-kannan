@@ -2,6 +2,7 @@ package in.kannan.service;
 
 import java.util.List;
 
+import in.kannan.dao.DAOFactory;
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
@@ -20,6 +21,10 @@ public class RatingService {
 		// private constructor to hide the existing class
 	}
 
+	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
+	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
+	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
+
 	/**
 	 * This method is used to add the users rating.It validates the input details,
 	 * check whether the user the rated for the particular movie before ,finds the
@@ -36,16 +41,16 @@ public class RatingService {
 			throws ServiceException, ValidationException {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
-			UserRating userRating = UserRatingDAO.findUserIdByUserIdAndMovieId(userId, movieId);
+			UserRating userRating = userRatingDAO.findUserIdByUserIdAndMovieId(userId, movieId);
 			if (userRating != null) {
 				throw new ServiceException("You already Rated");
 			}
-			User user = UserDAO.findRole(userId);
+			User user = userDAO.findRole(userId);
 			if (!user.getRole().equals("USER")) {
 				throw new ServiceException("Only users could rate the app");
 			}
 
-			UserRatingDAO.save(userId, movieId, rating);
+			userRatingDAO.save(userId, movieId, rating);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -64,7 +69,7 @@ public class RatingService {
 	 */
 	public static void undoRating(Integer userID, Integer movieId) throws ServiceException {
 		try {
-			UserRatingDAO.removeByUserIdAndMovieId(userID, movieId);
+			userRatingDAO.removeByUserIdAndMovieId(userID, movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -87,11 +92,11 @@ public class RatingService {
 		MovieValidator.validateMovieName(newMovieName);
 		Integer count = null;
 		try {
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			Integer movieId = movieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie Not found");
 			}
-			count = UserRatingDAO.countRatingByMovieId(movieId);
+			count = userRatingDAO.countRatingByMovieId(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
@@ -116,11 +121,11 @@ public class RatingService {
 		Integer count = null;
 		String newMovieName = movieName.trim();
 		try {
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			Integer movieId = movieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Movie Not found");
 			}
-			count = UserRatingDAO.countRatingByRatingAndMovieId(rating, movieId);
+			count = userRatingDAO.countRatingByRatingAndMovieId(rating, movieId);
 
 		} catch (DBException e) {
 			Logger.trace(e);
@@ -145,12 +150,12 @@ public class RatingService {
 		MovieValidator.validateMovieName(movieName);
 		String newMovieName = movieName.trim();
 		try {
-			Integer movieId = MovieDAO.findMovieIdByMovieName(newMovieName);
+			Integer movieId = movieDAO.findMovieIdByMovieName(newMovieName);
 			if (movieId == null) {
 				throw new ServiceException("Sorry Movie Not Registered");
 			}
 
-			return UserRatingDAO.countRatingByMovieIdOrderByRatingDesc(movieId);
+			return userRatingDAO.countRatingByMovieIdOrderByRatingDesc(movieId);
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());

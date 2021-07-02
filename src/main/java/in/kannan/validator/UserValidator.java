@@ -3,6 +3,7 @@ package in.kannan.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import in.kannan.constants.UserRoleEnum;
 import in.kannan.exception.ValidationException;
 import in.kannan.util.MessageConstant;
 
@@ -103,9 +104,9 @@ public class UserValidator {
 	 * @return
 	 */
 
-	public static boolean isValidRole(String role) {
+	public static boolean isValidRole(UserRoleEnum role) {
 		boolean isValid = false;
-		if (role.equalsIgnoreCase("ADMIN") || role.equalsIgnoreCase("USER")) {
+		if (role == UserRoleEnum.ADMIN || role == UserRoleEnum.USER) {
 			isValid = true;
 		}
 		return isValid;
@@ -119,7 +120,7 @@ public class UserValidator {
 	 * @throws ValidationException
 	 */
 
-	public static void validateUserDetails(String userName, String email, String password, String role)
+	public static void validateUserDetails(String userName, String email, String password, UserRoleEnum role)
 			throws ValidationException {
 		if (!isValidUserName(userName)) {
 			throw new ValidationException(MessageConstant.INVALIDUSERNAME);

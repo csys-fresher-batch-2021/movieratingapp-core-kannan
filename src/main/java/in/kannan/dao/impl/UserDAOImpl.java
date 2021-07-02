@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import in.kannan.constants.UserRoleEnum;
 import in.kannan.dao.UserDAO;
 import in.kannan.exception.DBException;
 import in.kannan.model.User;
@@ -51,8 +52,9 @@ public class UserDAOImpl implements UserDAO {
 				Integer id = rs.getInt(ID);
 				String name = rs.getString(NAME);
 				String role = rs.getString(ROLE);
+				UserRoleEnum userRole = UserRoleEnum.valueOf(role);
 				String userEmail = rs.getString(EMAIL);
-				user = new User(id, name, userEmail, role);
+				user = new User(id, name, userEmail, userRole);
 			}
 		}
 
@@ -92,8 +94,8 @@ public class UserDAOImpl implements UserDAO {
 
 			if (rs.next()) {
 
-				String role = rs.getString(ROLE);
-
+				String roleStr = rs.getString(ROLE);
+				UserRoleEnum role = UserRoleEnum.valueOf(roleStr);
 				user = new User(role);
 			}
 		}
@@ -129,7 +131,7 @@ public class UserDAOImpl implements UserDAO {
 			String userName = user.getName();
 			String email = user.getEmail();
 			String password = user.getPassword();
-			String role = user.getRole();
+			String role = user.getRole().toString();
 			pst.setString(1, userName);
 			pst.setString(2, email);
 			pst.setString(3, password);

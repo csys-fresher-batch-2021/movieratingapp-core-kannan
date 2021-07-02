@@ -1,24 +1,29 @@
 package in.kannan.dao;
 
+import java.util.List;
+
+import in.kannan.dao.impl.MovieDAOImpl;
 import in.kannan.exception.DBException;
+import in.kannan.model.Movie;
 
 public class MovieDAOTest {
 	public static void main(String[] args) throws DBException {
-//		
-//		private static MovieDAO movieDAO = new MovieDAOImpl();
-//
-//		movieDAO.remove(10);
-//		movieDAO.findAllMovieRating();
-//		 List<Movie> movieList = movieDAO.findByMovieId();
-//		// System.out.println(movieList);
-//		for (Movie movie : movieList) {
-//			System.out.println(movie);
-//		}
-//		System.out.println(movieDAO.findAll());
-//		 System.out.println(MovieDAO.findMovieAndRatingByRating(10));
-//		// System.out.println(MovieDAO.findMovieByAverageRating(6));
-//		// System.out.println(MovieDAO.findAllOrderByAverageRatingDesc());
-//		// System.out.println(MovieDAO.findByMovieId("Karnan"));
+
+		MovieDAO movieDAO = new MovieDAOImpl();
+
+		movieDAO.remove(10);
+		movieDAO.findAllMovieRatingOrderByReleaseDate();
+		List<Movie> movieList = movieDAO.findAll();
+		System.out.println(movieList);
+		for (Movie movie : movieList) {
+			System.out.println(movie);
+		}
+		System.out.println(movieDAO.findAll());
+		System.out.println(movieDAO.findAllByMovieId(3));
+		System.out.println(movieDAO.findAllMovieRatingOrderByReleaseDate());
+		System.out.println(movieDAO.findAllOrderByAverageRatingDesc());
+		System.out.println(movieDAO.findMovieIdByMovieName("Master"));
+
 	}
 
 }

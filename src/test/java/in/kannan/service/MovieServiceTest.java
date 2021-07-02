@@ -20,7 +20,7 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 */
 	public static void displayMovieDetail() throws ServiceException {
-		List<Movie> movie = MovieService.getAllMovies();
+		List<Movie> movie = MovieService.getInstance().getAllMovies();
 
 		System.out.println("Sorting BY Date");
 		for (Movie m : movie) {
@@ -36,7 +36,7 @@ public class MovieServiceTest {
 	 * @throws ServiceException
 	 */
 	public static void displayMovieWithRating() throws ServiceException {
-		List<MovieRating> movieRating = MovieService.getMoviesWithRating();
+		List<MovieRating> movieRating = MovieService.getInstance().getMoviesWithRating();
 		for (MovieRating movie : movieRating) {
 			System.out.println(movie);
 
@@ -60,30 +60,30 @@ public class MovieServiceTest {
 		// String date = "2021-05-03";
 
 		// This method saves the data
-		// MovieService.addMovie("Trip", "2021-02-05", true);
+		// MovieService.getInstance().addMovie("Trip", "2021-02-05", true);
 
 		// This method returns all movie along with their rating without order.
-		// System.out.println(MovieService.getAllMovieWithRating());
+		// System.out.println(MovieService.getInstance().getAllMovieWithRating());
 
 		// This method deletes the particular movie
-		// MovieService.removeMovie("Kathi");
+		// MovieService.getInstance().removeMovie("Keelakadu");
 
 		// It displays all the details of the movie along with their average rating in
 		// descending order
 		// displayMovieWithRating();
 
 		// It prints the details of the particular movie along with their average rating
-		// System.out.println(MovieService.getMovieWithRatingByMovieName("Bhoomi"));
+		System.out.println(MovieService.getInstance().getMovieWithRatingByMovieName("Bhoomi"));
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)
-		System.out.println(MovieService.getMoviesWithRating());
+		// System.out.println(MovieService.getInstance().getMoviesWithRating());
 
 		// counts number of user rated 3 and above 3 for all the movie
-		// System.out.println(MovieService.getMovieRatingByRating(3));
+//		System.out.println(MovieService.getInstance().getMovieRatingByRating(3));
 
 		// It prints the movie with average rating greater than and equal to 3
-		// System.out.println(MovieService.getMovieByAverageRating(3));
+		// System.out.println(MovieService.getInstance().getMovieByAverageRating(3));
 
 	}
 

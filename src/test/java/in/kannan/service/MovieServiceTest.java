@@ -1,5 +1,6 @@
 package in.kannan.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import in.kannan.exception.DBException;
@@ -34,8 +35,9 @@ public class MovieServiceTest {
 	 * 
 	 * @param list contain movie detail
 	 * @throws ServiceException
+	 * @throws IOException
 	 */
-	public static void displayMovieWithRating() throws ServiceException {
+	public static void displayMovieWithRating() throws ServiceException, IOException {
 		List<MovieRating> movieRating = MovieService.getInstance().getMoviesWithRating();
 		for (MovieRating movie : movieRating) {
 			System.out.println(movie);
@@ -51,16 +53,17 @@ public class MovieServiceTest {
 	 * @throws AdminLoginException
 	 * @throws DBException
 	 * @throws ValidationException
+	 * @throws IOException
 	 */
 
-	public static void main(String[] args) throws ServiceException, ValidationException {
+	public static void main(String[] args) throws ServiceException, ValidationException, IOException {
 
 		// This method prints the only the movie detail without rating.
 		// displayMovieDetail();
 		// String date = "2021-05-03";
 
 		// This method saves the data
-		// MovieService.getInstance().addMovie("Trip", "2021-02-05", true);
+		// MovieService.getInstance().addMovie("V", "2021-01-08", true);
 
 		// This method returns all movie along with their rating without order.
 		// System.out.println(MovieService.getInstance().getAllMovieWithRating());
@@ -70,10 +73,10 @@ public class MovieServiceTest {
 
 		// It displays all the details of the movie along with their average rating in
 		// descending order
-		// displayMovieWithRating();
+		displayMovieWithRating();
 
 		// It prints the details of the particular movie along with their average rating
-		System.out.println(MovieService.getInstance().getMovieWithRatingByMovieName("Bhoomi"));
+		// System.out.println(MovieService.getInstance().getMovieWithRatingByMovieName("Bhoomi"));
 
 		// It prints all the movie list according to their average rating descending
 		// (high to low)

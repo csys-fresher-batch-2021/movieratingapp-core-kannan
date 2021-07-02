@@ -17,8 +17,7 @@ public class UserServiceTest {
 		// "asf35AS@#Dwe"));
 
 		// This method checks the user Login
-		// System.out.println(UserService.getInstance().userLogin("ram1234@gmail.com",
-		// "asf35AS@#Dwe"));
+		System.out.println(UserService.getInstance().userLogin("sasi12@gmail.com", "12@#asdSDDW12@"));
 
 		// This method registers the particular user.
 		// String role = "ADMIN";
@@ -29,7 +28,7 @@ public class UserServiceTest {
 		// UserService.getInstance().userRegistration("Vinoth", "vino123@gmail.com",
 		// "ASaf12@#jK!2", userRole);
 
-		UserService.getInstance().blockUser(4);
+		// UserService.getInstance().blockUser(4);
 
 	}
 

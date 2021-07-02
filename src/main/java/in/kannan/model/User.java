@@ -1,18 +1,20 @@
 package in.kannan.model;
 
+import in.kannan.constants.UserRoleEnum;
+
 public class User {
 	private Integer id;
 	private String name;
 	private String email;
 	private String password;
-	private String role;
+	private UserRoleEnum role;
 
 	public User() {
 		super();
 
 	}
 
-	public User(String role) {
+	public User(UserRoleEnum role) {
 		super();
 		this.role = role;
 	}
@@ -28,7 +30,7 @@ public class User {
 		return "User [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + "]";
 	}
 
-	public User(Integer id, String name, String email, String role) {
+	public User(Integer id, String name, String email, UserRoleEnum role) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -36,7 +38,7 @@ public class User {
 		this.role = role;
 	}
 
-	public User(Integer id, String name, String email, String password, String role) {
+	public User(Integer id, String name, String email, String password, UserRoleEnum role) {
 		this(id, name, email, role);
 		this.password = password;
 
@@ -101,14 +103,14 @@ public class User {
 	/**
 	 * @return the role
 	 */
-	public String getRole() {
+	public UserRoleEnum getRole() {
 		return role;
 	}
 
 	/**
 	 * @param role the role to set
 	 */
-	public void setRole(String role) {
+	public void setRole(UserRoleEnum role) {
 		this.role = role;
 	}
 

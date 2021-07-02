@@ -2,6 +2,7 @@ package in.kannan.service;
 
 import java.time.LocalDateTime;
 
+import in.kannan.constants.UserRoleEnum;
 import in.kannan.dao.DAOFactory;
 import in.kannan.dao.UserDAO;
 import in.kannan.dao.UserRatingDAO;
@@ -19,6 +20,19 @@ public class UserService {
 		// private constructor to hide the implicit class
 	}
 
+	private static UserService userService = null;
+
+	public static UserService getInstance() {
+		if (userService == null) {
+			synchronized (UserService.class) {
+				if (userService == null) {
+					userService = new UserService();
+				}
+			}
+		}
+		return userService;
+	}
+
 	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
 	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
 
@@ -31,7 +45,7 @@ public class UserService {
 	 * @param password
 	 * @throws ServiceException
 	 */
-	public static User adminLogin(String email, String password) throws ServiceException {
+	public User adminLogin(String email, String password) throws ServiceException {
 		User user = null;
 		try {
 
@@ -39,7 +53,7 @@ public class UserService {
 
 			if (user == null) {
 				throw new ServiceException("Invalid Login credentialls");
-			} else if (!user.getRole().equals("ADMIN")) {
+			} else if (user.getRole() != UserRoleEnum.ADMIN) {
 				throw new ServiceException("Only ADMIN could login");
 			}
 
@@ -61,7 +75,7 @@ public class UserService {
 	 * @param password
 	 * @throws ServiceException
 	 */
-	public static User userLogin(String email, String password) throws ServiceException {
+	public User userLogin(String email, String password) throws ServiceException {
 		User user = null;
 		try {
 
@@ -73,7 +87,8 @@ public class UserService {
 
 			if (user == null) {
 				throw new ServiceException("Invalid Login credentials");
-			} else if (!user.getRole().equals("USER")) {
+			}
+			if (user.getRole() != UserRoleEnum.USER) {
 				throw new ServiceException("Only USER could login");
 			}
 
@@ -97,7 +112,7 @@ public class UserService {
 	 * @throws ServiceException
 	 */
 
-	public static void userRegistration(String userName, String email, String password, String role)
+	public void userRegistration(String userName, String email, String password, UserRoleEnum role)
 			throws ValidationException, ServiceException {
 		User user = null;
 		try {
@@ -128,7 +143,7 @@ public class UserService {
 	 * @throws ValidationException
 	 * @throws ServiceException
 	 */
-	public static void blockUser(Integer userId) throws ValidationException, ServiceException {
+	public void blockUser(Integer userId) throws ValidationException, ServiceException {
 		RatingValidator.validateId(userId);
 		try {
 			LocalDateTime blockedDateTime = LocalDateTime.now();

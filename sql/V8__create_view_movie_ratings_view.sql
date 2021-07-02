@@ -1,6 +1,17 @@
-create view movie_ratings_view as 
-select m.movie_id,m.movie_name,m.release_date,m.status,(case when a.round is null then 0 else a.round end) 
-as average_rating from movies m  left join (select movie_id , round(avg(rating),2) from user_ratings 
-											where active = true group by movie_id) as a 
-on m.movie_id = a.movie_id
-
+CREATE VIEW MOVIE_RATINGS_VIEW AS
+SELECT M.MOVIE_ID,
+	M.MOVIE_NAME,
+	M.RELEASE_DATE,
+	M.STATUS,
+	(CASE
+						WHEN A.ROUND IS NULL THEN 0
+						ELSE A.ROUND
+		END) AS AVERAGE_RATING
+FROM MOVIES M
+LEFT JOIN
+				(SELECT MOVIE_ID,
+						ROUND(AVG(RATING),
+										2)
+					FROM USER_RATINGS
+					WHERE ACTIVE = TRUE
+					GROUP BY MOVIE_ID) AS A ON M.MOVIE_ID = A.MOVIE_ID

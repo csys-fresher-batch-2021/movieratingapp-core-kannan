@@ -2,6 +2,7 @@ package in.kannan.service;
 
 import java.util.List;
 
+import in.kannan.constants.UserRoleEnum;
 import in.kannan.dao.DAOFactory;
 import in.kannan.dao.MovieDAO;
 import in.kannan.dao.UserDAO;
@@ -21,6 +22,20 @@ public class RatingService {
 		// private constructor to hide the existing class
 	}
 
+	private static RatingService ratingService = null;
+
+	public static RatingService getInstance() {
+		if (ratingService == null) {
+			synchronized (RatingService.class) {
+				if (ratingService == null) {
+					ratingService = new RatingService();
+				}
+
+			}
+		}
+		return ratingService;
+	}
+
 	private static MovieDAO movieDAO = DAOFactory.getMovieDAOInstance();
 	private static UserDAO userDAO = DAOFactory.getUserDAOInstance();
 	private static UserRatingDAO userRatingDAO = DAOFactory.getUserRatingDAOInstance();
@@ -37,7 +52,7 @@ public class RatingService {
 	 * @throws ValidationException
 	 */
 
-	public static void addUserRating(Integer userId, Integer movieId, Integer rating)
+	public void addUserRating(Integer userId, Integer movieId, Integer rating)
 			throws ServiceException, ValidationException {
 		try {
 			RatingValidator.validateRating(userId, movieId, rating);
@@ -46,7 +61,7 @@ public class RatingService {
 				throw new ServiceException("You already Rated");
 			}
 			User user = userDAO.findRole(userId);
-			if (!user.getRole().equals("USER")) {
+			if (user.getRole() != UserRoleEnum.USER) {
 				throw new ServiceException("Only users could rate the app");
 			}
 
@@ -67,7 +82,7 @@ public class RatingService {
 	 * @param movieId
 	 * @throws ServiceException
 	 */
-	public static void undoRating(Integer userID, Integer movieId) throws ServiceException {
+	public void undoRating(Integer userID, Integer movieId) throws ServiceException {
 		try {
 			userRatingDAO.removeByUserIdAndMovieId(userID, movieId);
 		} catch (DBException e) {
@@ -87,7 +102,7 @@ public class RatingService {
 	 * @throws ServiceException
 	 */
 
-	public static Integer countUsersRated(String movieName) throws ValidationException, ServiceException {
+	public Integer countUsersRated(String movieName) throws ValidationException, ServiceException {
 		String newMovieName = movieName.trim();
 		MovieValidator.validateMovieName(newMovieName);
 		Integer count = null;
@@ -115,7 +130,7 @@ public class RatingService {
 	 * @throws ServiceException
 	 */
 
-	public static Integer countRatingByRatingAndMovieName(Integer rating, String movieName)
+	public Integer countRatingByRatingAndMovieName(Integer rating, String movieName)
 			throws ValidationException, ServiceException {
 		RatingValidator.validateRating(rating, movieName);
 		Integer count = null;
@@ -145,7 +160,7 @@ public class RatingService {
 	 * @throws ValidationException
 	 */
 
-	public static List<MovieRatingDTO> getRatingCountByMovieName(String movieName)
+	public List<MovieRatingDTO> getRatingCountByMovieName(String movieName)
 			throws ServiceException, ValidationException {
 		MovieValidator.validateMovieName(movieName);
 		String newMovieName = movieName.trim();

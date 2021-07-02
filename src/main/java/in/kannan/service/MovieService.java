@@ -1,5 +1,7 @@
 package in.kannan.service;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
@@ -127,17 +129,29 @@ public class MovieService {
 	 * 
 	 * @return
 	 * @throws ServiceException
+	 * @throws IOException
 	 */
 
-	public List<MovieRating> getMoviesWithRating() throws ServiceException {
+	public List<MovieRating> getMoviesWithRating() throws ServiceException, IOException {
 
-		try {
+		try (PrintWriter pw = new PrintWriter("User Rating.text");) {
+
+			List<MovieRating> movieRating = movieDAO.findAllOrderByAverageRatingDesc();
+
+			for (MovieRating movieRating2 : movieRating) {
+				String s = movieRating2.toString();
+
+				pw.println(s);
+				pw.flush();
+
+			}
+
 			return movieDAO.findAllOrderByAverageRatingDesc();
+
 		} catch (DBException e) {
 			Logger.trace(e);
 			throw new ServiceException(e, e.getMessage());
 		}
-
 	}
 
 	/**
